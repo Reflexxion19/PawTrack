@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.PawTrack" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.PawTrack" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Define your custom color attribute -->
+    </style>
+
 </resources>

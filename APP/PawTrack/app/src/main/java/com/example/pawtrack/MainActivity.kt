@@ -1,46 +1,56 @@
 package com.example.pawtrack
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.pawtrack.ui.theme.PawTrackTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            PawTrackTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        setContentView(R.layout.login_layout)
+
+        val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
+        val registerTextView = findViewById<TextView>(R.id.textView4)
+
+        forgotPasswordTextView.setOnClickListener {
+            showForgotPasswordLayout()
+        }
+
+        registerTextView.setOnClickListener {
+            showRegisterLayout()
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun showForgotPasswordLayout() {
+        setContentView(R.layout.forgot_password_layout)
+        val returnButton = findViewById<Button>(R.id.button2)
+        returnButton.setOnClickListener {
+            setContentView(R.layout.login_layout)
+            reattachListeners()
+        }
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PawTrackTheme {
-        Greeting("Android")
+    private fun showRegisterLayout() {
+        setContentView(R.layout.register_layout)
+        val returnButton = findViewById<Button>(R.id.button2)
+        returnButton.setOnClickListener {
+            setContentView(R.layout.login_layout)
+            reattachListeners()
+        }
+    }
+
+    private fun reattachListeners() {
+        val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
+        val registerTextView = findViewById<TextView>(R.id.textView4)
+
+        forgotPasswordTextView.setOnClickListener {
+            showForgotPasswordLayout()
+        }
+
+        registerTextView.setOnClickListener {
+            showRegisterLayout()
+        }
     }
 }
