@@ -22,12 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.login_layout)
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
 
         // Initialize osmdroid configuration
         Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE))
     }
-
     fun openMap(view: View) {
         val intent = Intent(this, MapActivity::class.java)
         startActivity(intent)
@@ -39,57 +40,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-
-/* Not yet implemented
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_layout)
-
-        val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
-        val registerTextView = findViewById<TextView>(R.id.textView4)
-
-        forgotPasswordTextView.setOnClickListener {
-            showForgotPasswordLayout()
-        }
-
-        registerTextView.setOnClickListener {
-            showRegisterLayout()
-        }
-    }
-
-    private fun showForgotPasswordLayout() {
-        setContentView(R.layout.forgot_password_layout)
-        val returnButton = findViewById<Button>(R.id.button2)
-        returnButton.setOnClickListener {
-            setContentView(R.layout.login_layout)
-            reattachListeners()
-        }
-    }
-
-    private fun showRegisterLayout() {
-        setContentView(R.layout.register_layout)
-        val returnButton = findViewById<Button>(R.id.button2)
-        returnButton.setOnClickListener {
-            setContentView(R.layout.login_layout)
-            reattachListeners()
-        }
-    }
-
-    private fun reattachListeners() {
-        val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
-        val registerTextView = findViewById<TextView>(R.id.textView4)
-
-        forgotPasswordTextView.setOnClickListener {
-            showForgotPasswordLayout()
-        }
-
-        registerTextView.setOnClickListener {
-            showRegisterLayout()
-        }
-    }
-} */
-
 //Opens the map
 
 

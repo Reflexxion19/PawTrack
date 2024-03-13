@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.PawTrack" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.PawTrack2" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Define your custom color attribute -->
 
     </style>

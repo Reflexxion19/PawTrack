@@ -3,17 +3,14 @@
 
     <item
         android:id="@+id/home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="Home" />
+        android:title="Home"
+        android:icon="@drawable/baseline_home_24"/>
     <item
         android:id="@+id/statistics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="Statistics" />
+        android:title="Statistics"
+        android:icon="@drawable/baseline_insights_24"/>
     <item
         android:id="@+id/subscription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="Subscription" />
+        android:title="Subscription"
+        android:icon="@drawable/baseline_discount_24"/>
 </menu>

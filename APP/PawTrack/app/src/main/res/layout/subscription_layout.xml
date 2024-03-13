@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#FFFFFF"
-        android:clickable="true"
         app:itemIconTint="@color/black"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -36,136 +35,121 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            android:text="Summary"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
         <androidx.cardview.widget.CardView
-            android:layout_width="366dp"
-            android:layout_height="217dp"
+            android:layout_width="157dp"
+            android:layout_height="216dp"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="280dp"
             android:background="@drawable/edit_background_text"
-            app:cardBackgroundColor="#FAFAFA" >
+            app:cardBackgroundColor="#FAFAFA">
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="25dp"
-                android:text="Your Pets Activity"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="135dp"
+                android:text="$ 14.99"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="35dp"
+                android:text="3 MONTHS"
                 android:textColor="#000000"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="170dp"
+                android:text="$ 4.99 /month" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="157dp"
+            android:layout_height="216dp"
+            android:layout_marginStart="235dp"
+            android:layout_marginTop="280dp"
+            android:background="@drawable/edit_background_text"
+            app:cardBackgroundColor="#FAFAFA">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="170dp"
+                android:text="$ 2.50 /month" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="135dp"
+                android:text="$ 14.99"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="70dp"
-                android:text="Move"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="35dp"
+                android:text="6 MONTHS"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="90dp"
-                android:text="2/120 kcal"
-                android:textColor="@color/app_theme"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="110dp"
-                android:text="Steps"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="130dp"
-                android:text="152"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="150dp"
-                android:text="Distance"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="170dp"
-                android:text="0,09 km" />
-
-            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="136dp"
-                android:layout_height="131dp"
-                android:layout_marginStart="220dp"
-                android:layout_marginTop="40dp"
-                android:minWidth="200dp"
-                android:minHeight="200dp"
-                app:cpb_progress="152"
-                app:cpb_progress_max="2000"
-                app:cpb_progressbar_color="@color/app_theme" />
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView15"
+        <Button
+            android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="300dp"
-            android:text="Your Pets Route"
+            android:layout_marginStart="270dp"
+            android:layout_marginTop="250dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#4CAF50"
+            android:text="50% OFF" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="550dp"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#4CAF50"
+            android:text="CONTINUE"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="123dp"
+            android:layout_marginTop="120dp"
+            android:text="Unlock More Features!"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="366dp"
-            android:layout_height="217dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="330dp"
-            android:background="@color/edit_text_background"
-            app:cardBackgroundColor="#FAFAFA" >
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Maps" />
-
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:text="Set reminder" />
-        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="155dp"
+            android:text="Health advice for  your pet, meal plan and AD removal."
+            android:textSize="16sp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -173,12 +157,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="90dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="353dp"
+        android:layout_marginEnd="250dp"
         android:layout_marginBottom="15dp"
+        android:text="Subscription"
         android:textColor="#333030"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
