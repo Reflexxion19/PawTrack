@@ -3,10 +3,26 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <Button
         android:id="@+id/openMapButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open Map"
-        android:onClick="openMap" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="312dp"
+        android:onClick="openMap"
+        android:text="Open Map" />
+
+    <Button
+        android:id="@+id/buttonSetReminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="141dp"
+        android:layout_marginTop="292dp"
+        android:onClick="onSetReminderButtonClick"
+        android:text="Set Reminder" />
 </RelativeLayout>

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.pawtrack"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -54,11 +54,10 @@ android {
 }
 
 dependencies {
-    implementation("com.android.volley:volley-cronet:1.2.1")
-    implementation ("com.google.android.libraries.places:places:2.4.0")
-    implementation ("com.google.android.gms:play-services-location:18.0.0")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation ("androidx.appcompat:appcompat:1.3.0")
+
+    implementation ("org.osmdroid:osmdroid-android:6.1.1")
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")

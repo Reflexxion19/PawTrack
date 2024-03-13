@@ -1,51 +1,39 @@
 package com.example.pawtrack
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
+import org.osmdroid.util.GeoPoint
+import androidx.core.content.ContextCompat
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
-import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
+import android.location.LocationManager
+import android.content.Context
+import org.osmdroid.views.overlay.Marker
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var mMap: GoogleMap
-    private lateinit var placesClient: PlacesClient
-    private var lastKnownLocation: LatLng? = null // Declare a class-level variable
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1001
+    private lateinit var mapView: MapView
+    private lateinit var overpassQueryTask: OverpassQueryTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        // Initialize Places SDK
-        Places.initialize(applicationContext, getString(R.string.google_maps_key))
-        placesClient = Places.createClient(this)
-
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        mapView = findViewById<MapView>(R.id.map)
 
         // Request location permissions
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
@@ -53,14 +41,25 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
+        } else {
+            // Permission has been granted
+            initializeMapWithLocation()
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+    private fun initializeMapWithLocation() {
+        // Set the map tile source
+        mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
 
-        // Enable the location layer
-        if (ActivityCompat.checkSelfPermission(
+        // Enable the built-in zoom controls
+        mapView.setBuiltInZoomControls(true)
+
+        // Get the map controller
+        val mapController = mapView.controller
+
+        // Get the current location using LocationManager
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val location = if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -68,68 +67,110 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        mMap.isMyLocationEnabled = true
-
-        // Get the last known location of the device
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            location?.let {
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                lastKnownLocation = currentLatLng // Assign the last known location
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM))
-                searchForVeterinarians()
-            }
-        }
-    }
-
-    private fun searchForVeterinarians() {
-        val fields = listOf(Place.Field.NAME, Place.Field.LAT_LNG)
-        val request = FindCurrentPlaceRequest.newInstance(fields)
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Request location permissions if not granted
+            // Request the missing permissions from the user
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
-            return
+            null // Return null for the location until the permissions are granted
+        } else {
+            // Permission is granted, proceed with accessing the location
+            // For example, obtain the location using LocationManager
+            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         }
 
-        placesClient.findCurrentPlace(request).addOnSuccessListener { response ->
-            response.placeLikelihoods.forEach { placeLikelihood ->
-                val place = placeLikelihood.place
-                // Check if the place is of type VETERINARY_CARE
-                if (isPlaceType(place, Place.Type.PARK) || isPlaceType(place, Place.Type.VETERINARY_CARE)) {
-                    val markerOptions = MarkerOptions()
-                        .position(place.latLng!!)
-                        .title(place.name)
-                    mMap.addMarker(markerOptions)
-                }
+        // If location is not null, set the map center to the current location
+        location?.let {
+            /*:TODO replce the mock data - >>> */
+            val currentLocation = GeoPoint(54.922831,23.901035)
+            mapController.setCenter(currentLocation)
+            mapController.setZoom(16.0)
+
+            // Initialize OverpassQueryTask to find veterinaries
+            overpassQueryTask = OverpassQueryTask(this)
+            val VetUrl = "http://overpass-api.de/api/interpreter?data=[out:json];node[amenity=veterinary](around:1000,54.922831,23.901035);out;"
+            @Suppress("DEPRECATION")
+            overpassQueryTask.execute(VetUrl )
+
+
+            overpassQueryTask = OverpassQueryTask(this)
+            val parkURL = "http://overpass-api.de/api/interpreter?data=[out:json];node[amenity=park](around:1000,54.922831,23.901035);out;"
+            @Suppress("DEPRECATION")
+            overpassQueryTask.execute(parkURL)
+            // Add marker to current location
+            addMarkerToCurrentLocation(currentLocation)
+        }
+    }
+    private fun fetchPlaceInfo(url: String): JSONObject? {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        try {
+            val inputStream = connection.inputStream
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+            val response = StringBuilder()
+            var line: String?
+            while (bufferedReader.readLine().also { line = it } != null) {
+                response.append(line)
             }
-        }.addOnFailureListener { exception ->
-            // Handle errors
+            bufferedReader.close()
+            inputStream.close()
+            return JSONObject(response.toString())
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            connection.disconnect()
+        }
+        return null
+    }
+    private fun addMarkerToCurrentLocation(currentLocation: GeoPoint) {
+        val marker = Marker(mapView)
+        marker.position = currentLocation
+
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+
+        mapView.overlays.add(marker)
+        mapView.invalidate()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, initialize map with location
+                initializeMapWithLocation()
+            } else {
+                // Permission denied, handle accordingly
+
+            }
         }
     }
 
-    private fun isPlaceType(place: Place, type: Place.Type): Boolean {
-        return place.types?.contains(type) ?: false
+    override fun onResume() {
+        super.onResume()
+        Configuration.getInstance().load(applicationContext, getPreferences(MODE_PRIVATE))
     }
 
-    companion object {
-        private const val DEFAULT_ZOOM = 100f
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    override fun onPause() {
+        super.onPause()
+        Configuration.getInstance().save(applicationContext, getPreferences(MODE_PRIVATE))
     }
+
+    override fun onPlaceFound(placeInfo: JSONObject) {
+        val lat = placeInfo.getDouble("lat")
+        val lon = placeInfo.getDouble("lon")
+        val name = placeInfo.getJSONObject("tags").optString("name", "")
+        val Marker = Marker(mapView)
+        Marker.position = GeoPoint(lat, lon)
+        Marker.title = placeInfo.optString("display_name", name)
+        mapView.overlays.add(Marker)
+        mapView.invalidate()
+    }
+
 }

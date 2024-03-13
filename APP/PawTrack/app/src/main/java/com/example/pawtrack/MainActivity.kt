@@ -8,29 +8,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.pawtrack.ui.theme.PawTrackTheme
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import androidx.fragment.app.FragmentManager
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
+
+
+
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var gMap: GoogleMap // Specify the type of gMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync { googleMap ->
-            // You can initialize your map here
-            gMap = googleMap
-        }
+
+        // Initialize osmdroid configuration
+        Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE))
     }
+
     fun openMap(view: View) {
         val intent = Intent(this, MapActivity::class.java)
+        startActivity(intent)
+    }
+
+    fun onSetReminderButtonClick(view: View) {
+        // Start the ReminderSettingActivity
+        val intent = Intent(this, ReminderSettingActivity::class.java)
         startActivity(intent)
     }
 }
