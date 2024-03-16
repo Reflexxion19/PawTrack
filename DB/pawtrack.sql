@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2024 at 02:03 PM
+-- Generation Time: Mar 16, 2024 at 02:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -124,7 +124,7 @@ CREATE TABLE `pet` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `pet_picture` mediumblob DEFAULT NULL,
-  `TrackID` int(11) DEFAULT NULL,
+  `track_id` int(11) DEFAULT NULL,
   `track_status` tinyint(1) NOT NULL,
   `activity_category` int(11) NOT NULL,
   `fk_Userusername` varchar(255) NOT NULL
