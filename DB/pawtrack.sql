@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 07, 2024 at 11:46 AM
+-- Generation Time: Mar 16, 2024 at 02:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -56,7 +56,7 @@ CREATE TABLE `activity_report` (
   `steps_walked` int(11) NOT NULL,
   `calories_burned` int(11) NOT NULL,
   `active_time` time NOT NULL,
-  `mood` int(11) NOT NULL,
+  `mood` int(11) DEFAULT NULL,
   `fk_Petid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -72,6 +72,25 @@ CREATE TABLE `diet` (
   `description` varchar(255) DEFAULT NULL,
   `fk_Petid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `language`
+--
+
+CREATE TABLE `language` (
+  `id_Language` int(11) NOT NULL,
+  `name` char(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `language`
+--
+
+INSERT INTO `language` (`id_Language`, `name`) VALUES
+(1, 'lietuvių'),
+(2, 'english');
 
 -- --------------------------------------------------------
 
@@ -104,10 +123,9 @@ INSERT INTO `mood` (`id_Mood`, `name`) VALUES
 CREATE TABLE `pet` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `breed` varchar(255) NOT NULL,
-  `weight` float NOT NULL,
-  `gender` varchar(255) NOT NULL,
-  `pet_picture` longblob DEFAULT NULL,
+  `pet_picture` mediumblob DEFAULT NULL,
+  `TrackID` int(11) DEFAULT NULL,
+  `track_status` tinyint(1) NOT NULL,
   `activity_category` int(11) NOT NULL,
   `fk_Userusername` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -115,21 +133,29 @@ CREATE TABLE `pet` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role`
+-- Table structure for table `point`
 --
 
-CREATE TABLE `role` (
-  `id_Role` int(11) NOT NULL,
-  `name` char(10) NOT NULL
+CREATE TABLE `point` (
+  `id` varchar(255) NOT NULL,
+  `time` datetime NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL,
+  `fk_Activity_Reportid` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `role`
+-- Table structure for table `reminder`
 --
 
-INSERT INTO `role` (`id_Role`, `name`) VALUES
-(1, 'User'),
-(2, 'Admin');
+CREATE TABLE `reminder` (
+  `id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `time` datetime NOT NULL,
+  `fk_Petid` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -139,8 +165,8 @@ INSERT INTO `role` (`id_Role`, `name`) VALUES
 
 CREATE TABLE `settings` (
   `id` varchar(255) NOT NULL,
-  `Notifications` tinyint(1) NOT NULL,
-  `reminders` tinyint(1) NOT NULL,
+  `dark_mode` tinyint(1) NOT NULL,
+  `language` int(11) NOT NULL,
   `fk_Userusername` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -154,10 +180,9 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `profile_picture` longblob DEFAULT NULL,
-  `premium` tinyint(1) NOT NULL,
-  `premium_expiration` datetime DEFAULT NULL,
-  `role` int(11) NOT NULL
+  `profile_picture` mediumblob DEFAULT NULL,
+  `subscribed` tinyint(1) NOT NULL,
+  `premium_expiration` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -186,6 +211,12 @@ ALTER TABLE `diet`
   ADD KEY `Assinged` (`fk_Petid`);
 
 --
+-- Indexes for table `language`
+--
+ALTER TABLE `language`
+  ADD PRIMARY KEY (`id_Language`);
+
+--
 -- Indexes for table `mood`
 --
 ALTER TABLE `mood`
@@ -200,24 +231,32 @@ ALTER TABLE `pet`
   ADD KEY `Has` (`fk_Userusername`);
 
 --
--- Indexes for table `role`
+-- Indexes for table `point`
 --
-ALTER TABLE `role`
-  ADD PRIMARY KEY (`id_Role`);
+ALTER TABLE `point`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Includes` (`fk_Activity_Reportid`);
+
+--
+-- Indexes for table `reminder`
+--
+ALTER TABLE `reminder`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Puts` (`fk_Petid`);
 
 --
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `fk_Userusername` (`fk_Userusername`);
+  ADD UNIQUE KEY `fk_Userusername` (`fk_Userusername`),
+  ADD KEY `language` (`language`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`),
-  ADD KEY `role` (`role`);
+  ADD PRIMARY KEY (`username`);
 
 --
 -- Constraints for dumped tables
@@ -244,16 +283,23 @@ ALTER TABLE `pet`
   ADD CONSTRAINT `pet_ibfk_1` FOREIGN KEY (`activity_category`) REFERENCES `activity` (`id_Activity`);
 
 --
+-- Constraints for table `point`
+--
+ALTER TABLE `point`
+  ADD CONSTRAINT `Includes` FOREIGN KEY (`fk_Activity_Reportid`) REFERENCES `activity_report` (`id`);
+
+--
+-- Constraints for table `reminder`
+--
+ALTER TABLE `reminder`
+  ADD CONSTRAINT `Puts` FOREIGN KEY (`fk_Petid`) REFERENCES `pet` (`id`);
+
+--
 -- Constraints for table `settings`
 --
 ALTER TABLE `settings`
-  ADD CONSTRAINT `Sets` FOREIGN KEY (`fk_Userusername`) REFERENCES `user` (`username`);
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role`) REFERENCES `role` (`id_Role`);
+  ADD CONSTRAINT `Sets` FOREIGN KEY (`fk_Userusername`) REFERENCES `user` (`username`),
+  ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`language`) REFERENCES `language` (`id_Language`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
