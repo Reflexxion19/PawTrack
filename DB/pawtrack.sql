@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 16, 2024 at 02:10 PM
+-- Generation Time: Mar 20, 2024 at 09:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -76,6 +76,20 @@ CREATE TABLE `diet` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `gps_data`
+--
+
+CREATE TABLE `gps_data` (
+  `id` varchar(255) NOT NULL,
+  `time` datetime NOT NULL,
+  `lat` float NOT NULL,
+  `long` float NOT NULL,
+  `fk_Activity_Reportid` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `language`
 --
 
@@ -89,8 +103,8 @@ CREATE TABLE `language` (
 --
 
 INSERT INTO `language` (`id_Language`, `name`) VALUES
-(1, 'lietuvių'),
-(2, 'english');
+(1, 'LT'),
+(2, 'EN');
 
 -- --------------------------------------------------------
 
@@ -128,20 +142,6 @@ CREATE TABLE `pet` (
   `track_status` tinyint(1) NOT NULL,
   `activity_category` int(11) NOT NULL,
   `fk_Userusername` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `point`
---
-
-CREATE TABLE `point` (
-  `id` varchar(255) NOT NULL,
-  `time` datetime NOT NULL,
-  `latitude` float NOT NULL,
-  `longitude` float NOT NULL,
-  `fk_Activity_Reportid` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -211,6 +211,13 @@ ALTER TABLE `diet`
   ADD KEY `Assinged` (`fk_Petid`);
 
 --
+-- Indexes for table `gps_data`
+--
+ALTER TABLE `gps_data`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `Includes` (`fk_Activity_Reportid`);
+
+--
 -- Indexes for table `language`
 --
 ALTER TABLE `language`
@@ -229,13 +236,6 @@ ALTER TABLE `pet`
   ADD PRIMARY KEY (`id`),
   ADD KEY `activity_category` (`activity_category`),
   ADD KEY `Has` (`fk_Userusername`);
-
---
--- Indexes for table `point`
---
-ALTER TABLE `point`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `Includes` (`fk_Activity_Reportid`);
 
 --
 -- Indexes for table `reminder`
@@ -276,17 +276,17 @@ ALTER TABLE `diet`
   ADD CONSTRAINT `Assinged` FOREIGN KEY (`fk_Petid`) REFERENCES `pet` (`id`);
 
 --
+-- Constraints for table `gps_data`
+--
+ALTER TABLE `gps_data`
+  ADD CONSTRAINT `Includes` FOREIGN KEY (`fk_Activity_Reportid`) REFERENCES `activity_report` (`id`);
+
+--
 -- Constraints for table `pet`
 --
 ALTER TABLE `pet`
   ADD CONSTRAINT `Has` FOREIGN KEY (`fk_Userusername`) REFERENCES `user` (`username`),
   ADD CONSTRAINT `pet_ibfk_1` FOREIGN KEY (`activity_category`) REFERENCES `activity` (`id_Activity`);
-
---
--- Constraints for table `point`
---
-ALTER TABLE `point`
-  ADD CONSTRAINT `Includes` FOREIGN KEY (`fk_Activity_Reportid`) REFERENCES `activity_report` (`id`);
 
 --
 -- Constraints for table `reminder`
