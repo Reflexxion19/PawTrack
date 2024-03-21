@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 20, 2024 at 09:53 PM
+-- Generation Time: Mar 21, 2024 at 08:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -50,7 +50,7 @@ INSERT INTO `activity` (`id_Activity`, `name`) VALUES
 --
 
 CREATE TABLE `activity_report` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL,
   `date` datetime NOT NULL,
   `distance_walked` float NOT NULL,
   `steps_walked` int(11) NOT NULL,
@@ -80,11 +80,11 @@ CREATE TABLE `diet` (
 --
 
 CREATE TABLE `gps_data` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL,
   `time` datetime NOT NULL,
   `lat` float NOT NULL,
   `long` float NOT NULL,
-  `fk_Activity_Reportid` varchar(255) NOT NULL
+  `fk_Activity_Reportid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -164,7 +164,7 @@ CREATE TABLE `reminder` (
 --
 
 CREATE TABLE `settings` (
-  `id` varchar(255) NOT NULL,
+  `id` int(11) NOT NULL,
   `dark_mode` tinyint(1) NOT NULL,
   `language` int(11) NOT NULL,
   `fk_Userusername` varchar(255) NOT NULL
@@ -257,6 +257,46 @@ ALTER TABLE `settings`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`username`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `activity_report`
+--
+ALTER TABLE `activity_report`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `diet`
+--
+ALTER TABLE `diet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `gps_data`
+--
+ALTER TABLE `gps_data`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pet`
+--
+ALTER TABLE `pet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `reminder`
+--
+ALTER TABLE `reminder`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
