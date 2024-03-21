@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="25dp"
-                android:text="Your Pets' Activity on"
+                android:text="@string/string_your_pets_activity_on"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="70dp"
-                android:text="Move"
+                android:text="@string/string_move"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="110dp"
-                android:text="Steps"
+                android:text="@string/string_steps"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="150dp"
-                android:text="Distance"
+                android:text="@string/string_distance"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="187dp"
                 android:layout_marginTop="25dp"
-                android:text="Monday"
+                android:text="@string/string_monday"
                 android:textColor="#000000"
                 android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
@@ -230,50 +230,50 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:text="M" />
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="110dp"
-            android:text="T" />
+            android:layout_marginStart="50dp"
+            android:text="@string/string_mon" />
 
         <TextView
             android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
-            android:text="W" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="210dp"
-            android:text="T" />
+            android:layout_marginStart="150dp"
+            android:text="@string/string_wed" />
 
         <TextView
             android:id="@+id/textView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="260dp"
-            android:text="F" />
+            android:layout_marginStart="250dp"
+            android:text="@string/string_fri" />
 
         <TextView
             android:id="@+id/textView20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="310dp"
-            android:text="S" />
+            android:layout_marginStart="300dp"
+            android:text="@string/string_sat" />
 
         <TextView
             android:id="@+id/textView21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="360dp"
-            android:text="S" />
+            android:layout_marginStart="350dp"
+            android:text="@string/string_sun" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:text="@string/string_tue" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="200dp"
+            android:text="@string/string_thu" />
 
     </androidx.cardview.widget.CardView>
 
@@ -285,7 +285,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="250dp"
         android:layout_marginBottom="15dp"
-        android:text="This week's Activity"
+        android:text="@string/string_this_weeks_activity"
         android:textColor="#333030"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"

@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="135dp"
-                android:text="$ 14.99"
+                android:text="@string/string_14_99_dollars"
                 android:textSize="18sp" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
-                android:text="3 MONTHS"
+                android:text="@string/string_3_months"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="170dp"
-                android:text="$ 4.99 /month" />
+                android:text="@string/string_4_99_a_month" />
 
         </androidx.cardview.widget.CardView>
 
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="170dp"
-                android:text="$ 2.50 /month" />
+                android:text="@string/string_2_50_a_month" />
 
             <TextView
                 android:id="@+id/textView10"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="135dp"
-                android:text="$ 14.99"
+                android:text="@string/string_14_99_dollars"
                 android:textSize="18sp" />
 
             <TextView
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="35dp"
-                android:text="6 MONTHS"
+                android:text="@string/string_6_months"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -118,7 +118,7 @@
             android:layout_marginTop="250dp"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#4CAF50"
-            android:text="50% OFF" />
+            android:text="@string/string_50_percent_off" />
 
         <Button
             android:id="@+id/button4"
@@ -128,7 +128,7 @@
             android:layout_marginTop="550dp"
             android:background="@drawable/rounded_button"
             android:backgroundTint="#4CAF50"
-            android:text="CONTINUE"
+            android:text="@string/btn_continue"
             android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
@@ -138,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="123dp"
             android:layout_marginTop="120dp"
-            android:text="Unlock More Features!"
+            android:text="@string/string_unlock_more_features"
             android:textColor="#000000"
             android:textSize="18sp" />
 
@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
             android:layout_marginTop="155dp"
-            android:text="Health advice for  your pet, meal plan and AD removal."
+            android:text="@string/string_health_advice_for_your_pet"
             android:textSize="16sp" />
 
     </androidx.cardview.widget.CardView>
@@ -161,7 +161,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="250dp"
         android:layout_marginBottom="15dp"
-        android:text="Subscription"
+        android:text="@string/string_subscription"
         android:textColor="#333030"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"

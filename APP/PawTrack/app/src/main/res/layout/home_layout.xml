@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
-            android:text="Summary"
+            android:text="@string/string_summary"
             android:textColor="#000000"
             android:textSize="20sp" />
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="25dp"
-                android:text="Your Pets Activity"
+                android:text="@string/string_your_pets_activity"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="70dp"
-                android:text="Move"
+                android:text="@string/string_move"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="110dp"
-                android:text="Steps"
+                android:text="@string/string_steps"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="150dp"
-                android:text="Distance"
+                android:text="@string/string_distance"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="300dp"
-            android:text="Your Pets Route"
+            android:text="@string/string_your_pets_route"
             android:textColor="#000000"
             android:textSize="20sp" />
 
@@ -157,14 +157,14 @@
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Maps" />
+                android:text="@string/btn_open_map" />
 
             <Button
                 android:id="@+id/button5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:text="Set reminder" />
+                android:text="@string/btn_set_reminder" />
         </androidx.cardview.widget.CardView>
 
     </androidx.cardview.widget.CardView>
