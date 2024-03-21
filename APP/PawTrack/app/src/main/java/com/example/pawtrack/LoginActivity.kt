@@ -12,6 +12,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.vishnusivadas.advanced_httpurlconnection.PutData
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.apache.commons.codec.digest.DigestUtils
+import java.io.IOException
 
 class LoginActivity: AppCompatActivity() {
 
@@ -38,42 +44,44 @@ class LoginActivity: AppCompatActivity() {
         }
 
         buttonSignIn.setOnClickListener{
-            if(!usernameEditText.text.equals("") && !passwordEditText.equals(""))
+            if(!usernameEditText.text.equals("") || !passwordEditText.equals(""))
             {
-                val handler = Handler(Looper.getMainLooper())
-                handler.post(Runnable {
-                    //Starting Write and Read data with URL
-                    //Creating array for parameters
-                    val field = arrayOfNulls<String>(2)
-                    field[0] = "username"
-                    field[1] = "password"
-                    //Creating array for data
-                    val data = arrayOfNulls<String>(2)
-                    data[0] = usernameEditText.text.toString()
-                    data[1] = passwordEditText.text.toString()
-                    val putData = PutData(
-                        "http://192.168.56.1/Pawtrack/login.php", //savo ipv4 adresa jei lokaliai darot
-                        "POST",
-                        field,
-                        data
-                    )
-                    if (putData.startPut()) {
-                        if (putData.onComplete()) {
-                            val result: String = putData.getResult()
-                            if(result.equals("Login successful"))
-                            {
-                                Toast.makeText(applicationContext,result, Toast.LENGTH_SHORT).show()
-                                val intent = Intent(applicationContext, HomePageActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                            else
-                            {
-                                Toast.makeText(applicationContext,result, Toast.LENGTH_SHORT).show()
-                            }
+                val username = usernameEditText.text.toString()
+                val password = passwordEditText.text.toString()
+                val hashedPassword = DigestUtils.sha256Hex(password)
+                val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+                val json = """
+                {
+                    "type": "l_i",
+                    "u": "$username",
+                    "p": "$hashedPassword"
+                }
+                """.trimIndent()
+                val body = json.toRequestBody(jsonMediaType)
+                val request = Request.Builder()
+                    .url("https://pvp.seriouss.am")
+                    .post(body)
+                    .build()
+
+                val client = OkHttpClient()
+                client.newCall(request).enqueue(object : okhttp3.Callback {
+                    override fun onFailure(call: okhttp3.Call, e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                        if (response.body.toString() == "Login successful") {
+                            val responseString = response.body?.string()
+                            val intent = Intent(applicationContext, HomePageActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        else {
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
                     }
-                    //End Write and Read data with URL
                 })
             }
             else

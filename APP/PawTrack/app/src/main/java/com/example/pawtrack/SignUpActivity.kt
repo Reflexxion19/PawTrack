@@ -9,7 +9,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.vishnusivadas.advanced_httpurlconnection.PutData
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.apache.commons.codec.digest.DigestUtils
+import okhttp3.MediaType
+import java.io.IOException
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -23,45 +29,49 @@ class SignUpActivity : AppCompatActivity() {
         val buttonSignUp = findViewById<Button>(R.id.signupbutton)
 
         buttonSignUp.setOnClickListener{
-            if(!usernameEditText.text.equals("") && !emailEditText.text.equals("") && !passwordEditText.equals(""))
+            if(!usernameEditText.text.equals("") || !emailEditText.text.equals("") || !passwordEditText.equals(""))
             {
-                val handler = Handler(Looper.getMainLooper())
-                handler.post(Runnable {
-                    //Starting Write and Read data with URL
-                    //Creating array for parameters
-                    val field = arrayOfNulls<String>(3)
-                    field[0] = "username"
-                    field[1] = "email"
-                    field[2] = "password"
-                    //Creating array for data
-                    val data = arrayOfNulls<String>(3)
-                    data[0] = usernameEditText.text.toString()
-                    data[1] = emailEditText.text.toString()
-                    data[2] = passwordEditText.text.toString()
-                    val putData = PutData(
-                        "http://192.168.56.1/Pawtrack/signup.php", //savo ipv4 adresa jei lokaliai darot
-                        "POST",
-                        field,
-                        data
-                    )
-                    if (putData.startPut()) {
-                        if (putData.onComplete()) {
-                            val result: String = putData.getResult()
-                            if(result.equals("Signed Up Successfully"))
-                            {
-                                Toast.makeText(applicationContext,result, Toast.LENGTH_SHORT).show()
-                                val intent = Intent(applicationContext, LoginActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                            else
-                            {
-                                print(result)
-                                Toast.makeText(applicationContext,result, Toast.LENGTH_LONG).show()
-                            }
+                val username = usernameEditText.text.toString()
+                val email = emailEditText.text.toString()
+                val password = passwordEditText.text.toString()
+                val hashedPassword = DigestUtils.sha256Hex(password)
+                val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+                val json = """
+                {
+                    "type": "u_r",
+                    "u": "$username",
+                    "p": "$hashedPassword",
+                    "e": "$email",
+                    "p_p": null,
+                    "s": 0,
+                    "p_e": "2028-03-30 00:01:00"
+                }
+                """.trimIndent()
+                val body = json.toRequestBody(jsonMediaType)
+                val request = Request.Builder()
+                    .url("https://pvp.seriouss.am")
+                    .post(body)
+                    .build()
+
+                val client = OkHttpClient()
+                client.newCall(request).enqueue(object : okhttp3.Callback {
+                    override fun onFailure(call: okhttp3.Call, e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                        if (response.isSuccessful) {
+                            val responseString = response.body?.string()
+                            Toast.makeText(applicationContext,responseString, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        else {
+                            print(response.body?.string())
+                            Toast.makeText(applicationContext,response.body.toString(), Toast.LENGTH_LONG).show()
                         }
                     }
-                    //End Write and Read data with URL
                 })
             }
             else
@@ -71,8 +81,8 @@ class SignUpActivity : AppCompatActivity() {
         }
         val returnButton = findViewById<Button>(R.id.button2)
         returnButton.setOnClickListener {
-            setContentView(R.layout.login_layout)
-            finish()
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 }
