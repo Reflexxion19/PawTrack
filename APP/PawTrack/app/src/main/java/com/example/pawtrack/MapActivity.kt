@@ -1,6 +1,7 @@
 package com.example.pawtrack
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.app.ActivityCompat
 import android.location.LocationManager
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import org.osmdroid.views.overlay.Marker
 import org.json.JSONArray
 import org.json.JSONObject
@@ -173,4 +176,11 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
         mapView.invalidate()
     }
 
+    //Cia, kad back buttonas nenumestu userio atgal dviem ekranam atgal
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        val intent = Intent(applicationContext, HomePageActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
 }

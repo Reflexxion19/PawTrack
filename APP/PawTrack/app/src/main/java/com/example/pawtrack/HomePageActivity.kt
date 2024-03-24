@@ -1,9 +1,11 @@
 package com.example.pawtrack
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -70,5 +72,8 @@ class HomePageActivity: AppCompatActivity() {
         dateFormat.timeZone = TimeZone.getDefault()
 
         return dateFormat.format(calendar.time)
+    }
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
     }
 }
