@@ -1,17 +1,12 @@
 package com.example.pawtrack
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.vishnusivadas.advanced_httpurlconnection.PutData
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -44,7 +39,7 @@ class LoginActivity: AppCompatActivity() {
         }
 
         buttonSignIn.setOnClickListener{
-            if(!usernameEditText.text.equals("") || !passwordEditText.equals(""))
+            if(!usernameEditText.text.isEmpty() || !passwordEditText.text.isEmpty())
             {
                 val username = usernameEditText.text.toString()
                 val password = passwordEditText.text.toString()
@@ -70,23 +65,23 @@ class LoginActivity: AppCompatActivity() {
                     }
 
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                        if (response.body.toString() == "Login successful") {
-                            val responseString = response.body?.string()
-                            val intent = Intent(applicationContext, HomePageActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                        else {
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                        runOnUiThread {
+                            val responseBodyString = response.body?.string() ?: ""
+                            if (responseBodyString == "Login successful") {
+                                val intent = Intent(applicationContext, HomePageActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            else {
+                                Toast.makeText(applicationContext,"Username or password is incorrect", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 })
             }
             else
             {
-                Toast.makeText(applicationContext,"All fields are required.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"All fields are required", Toast.LENGTH_SHORT).show()
             }
         }
     }

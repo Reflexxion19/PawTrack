@@ -22,7 +22,7 @@
         android:layout_marginBottom="68dp"
         android:text="@string/string_welcome_back"
         android:textColor="@color/white"
-        android:textSize="36dp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="32dp"
                 android:background="@color/edit_text_background"
-                android:drawableLeft="@drawable/baseline_email_24"
+                android:drawableLeft="@drawable/baseline_accessibility_24"
                 android:drawablePadding="8dp"
                 android:drawableTint="@color/app_theme"
                 android:ems="10"
