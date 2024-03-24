@@ -182,5 +182,6 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
         val intent = Intent(applicationContext, HomePageActivity::class.java)
         startActivity(intent)
         finish()
+
     }
 }
