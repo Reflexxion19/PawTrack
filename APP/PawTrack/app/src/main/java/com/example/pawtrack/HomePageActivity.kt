@@ -28,13 +28,6 @@ class HomePageActivity: AppCompatActivity() {
         val CurrentTime = findViewById<TextView>(R.id.textView)
         CurrentTime.text = getCurrentTime()
 
-        val mapsButton = findViewById<Button>(R.id.button)
-
-        mapsButton.setOnClickListener(){
-            val intent = Intent(applicationContext, MapActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         val reminderButton = findViewById<Button>(R.id.button5)
 
@@ -49,6 +42,16 @@ class HomePageActivity: AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.map -> {
+                    val intent = Intent(applicationContext, MapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.tracking -> {
+                    val intent = Intent(applicationContext, TrackingActivity::class.java)
                     startActivity(intent)
                     true
                 }

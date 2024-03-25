@@ -6,9 +6,18 @@
         android:title="Home"
         android:icon="@drawable/baseline_home_24"/>
     <item
+        android:id="@+id/tracking"
+        android:title="Tracking"
+        android:icon="@drawable/sound_detection_dog_barking"/>
+    <item
         android:id="@+id/statistics"
         android:title="Statistics"
         android:icon="@drawable/baseline_insights_24"/>
+
+    <item
+        android:id="@+id/map"
+        android:title="Map"
+        android:icon="@drawable/pin_drop"/>
     <item
         android:id="@+id/subscription"
         android:title="Subscription"

@@ -44,6 +44,7 @@
         <activity android:name=".RemindPasswordActivity" />
         <activity android:name=".StatisticsActivity" />
         <activity android:name=".SubscriptionActivity" />
+        <activity android:name=".TrackingActivity" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 
