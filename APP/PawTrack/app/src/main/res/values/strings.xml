@@ -58,4 +58,20 @@
     <string name="map_parks">Parks</string>
     <string name="map_vets">Vets</string>
     <string name="map_shops">Shops</string>
+    <string name="string_pet_name">Pet name</string>
+    <string name="string_pet_name_label">Name</string>
+    <string name="string_pet_activity_label">Activity category</string>
+    <string name="string_pet_trackID_label">Track ID</string>
+    <string name="string_create">Create</string>
+    <string name="string_nickname">Nickname</string>
+    <string name="string_email_example">nickname@email.com</string>
+    <string name="string_created_label">Created:</string>
+    <string name="string_date_example">2024/03/25</string>
+    <string name="string_premium_label">Premium:</string>
+    <string name="string_billings">Billings</string>
+    <string name="string_account_settings">ACCOUNT SETTINGS</string>
+    <string name="string_account_preferences">PREFERENCES</string>
+    <string name="string_log_out">LOG OUT</string>
+
+
 </resources>

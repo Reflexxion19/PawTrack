@@ -25,6 +25,7 @@
                 android:drawableStart="@drawable/baseline_arrow_back_24"
                 android:drawableTint="@color/app_theme"
                 android:textSize="30sp"
+                android:paddingStart="2dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="30dp"
@@ -51,7 +52,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nickname"
+                android:text="@string/string_nickname"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
@@ -62,7 +63,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="nickname@email.com"
+                android:text="@string/string_email_example"
                 app:layout_constraintEnd_toEndOf="@+id/textView"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -80,13 +81,13 @@
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Created:" />
+                    android:text="@string/string_created_label" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2024/03/25"
+                    android:text="@string/string_date_example"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
 
@@ -102,12 +103,12 @@
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Premium:"/>
+                    android:text="@string/string_premium_label"/>
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2024/03/25"
+                    android:text="@string/string_date_example"
                     android:textColor="#f54242"
                     android:layout_marginStart="8dp"/>
             </LinearLayout>
@@ -134,7 +135,7 @@
                     android:drawableStart="@drawable/ic_2"
                     android:drawablePadding="20dp"
                     android:paddingStart="28dp"
-                    android:text="BILLINGS"
+                    android:text="@string/string_billings"
                     android:textAlignment="viewStart" />
 
                 <Button
@@ -149,7 +150,7 @@
                     android:drawableStart="@drawable/ic_3"
                     android:drawablePadding="20dp"
                     android:paddingStart="28dp"
-                    android:text="ACCOUNT SETTINGS"
+                    android:text="@string/string_account_settings"
                     android:textAlignment="viewStart" />
 
                 <Button
@@ -164,7 +165,7 @@
                     android:drawableStart="@drawable/ic_1"
                     android:drawablePadding="20dp"
                     android:paddingStart="28dp"
-                    android:text="PREFERENCES"
+                    android:text="@string/string_account_preferences"
                     android:textAlignment="viewStart" />
 
                 <Button
@@ -176,7 +177,7 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background_1"
-                    android:text="LOG OUT"
+                    android:text="@string/string_log_out"
                     android:textColor="#D80202" />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
