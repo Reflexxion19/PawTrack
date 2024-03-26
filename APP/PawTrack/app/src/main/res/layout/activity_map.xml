@@ -1,14 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_theme">
+
+    <ImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_filter"
+        android:background="@drawable/rounded_button"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/btnPetShops"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/map_shops"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        app:layout_constraintStart_toEndOf="@id/imgIcon"
+        app:layout_constraintEnd_toStartOf="@id/btnParks"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/btnParks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/map_parks"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        app:layout_constraintStart_toEndOf="@id/btnPetShops"
+        app:layout_constraintEnd_toStartOf="@id/btnVets"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        android:layout_margin="8dp"/>
+
+    <Button
+        android:id="@+id/btnVets"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/map_vets"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        app:layout_constraintStart_toEndOf="@id/btnParks"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map"
+        android:layout_margin="8dp"/>
 
     <org.osmdroid.views.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:clickable="true"
-        />
+        app:layout_constraintTop_toBottomOf="@id/btnPetShops"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"/>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/button_nav_menu" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

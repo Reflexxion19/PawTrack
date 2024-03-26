@@ -9,34 +9,42 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 @Suppress("DEPRECATION")
-class OverpassQueryTask(private val listener: OverpassQueryListener) : AsyncTask<String, Void, ArrayList<JSONObject>>() {
+class OverpassQueryTask(private val listener: OverpassQueryListener, private val iconResource: Int) : AsyncTask<Pair<String, Int>, Void, ArrayList<JSONObject>>() {
+
 
     interface OverpassQueryListener {
-        fun onPlaceFound(placeInfo: JSONObject)
+        fun onPlaceFound(placeInfo: JSONObject, ic: Int)
     }
 
-    override fun doInBackground(vararg urls: String): ArrayList<JSONObject> {
-        val url = URL(urls[0])
-        val urlConnection = url.openConnection() as HttpURLConnection
-        val inputStreamReader = InputStreamReader(urlConnection.inputStream)
-        val bufferedReader = BufferedReader(inputStreamReader)
 
-        val response = StringBuilder()
-        var line: String?
-        while (bufferedReader.readLine().also { line = it } != null) {
-            response.append(line)
+    override fun doInBackground(vararg urlIconPairs: Pair<String, Int>): ArrayList<JSONObject> {
+        val places = ArrayList<JSONObject>()
+
+        for ((url, iconResource) in urlIconPairs) {
+            val urlConnection = URL(url).openConnection() as HttpURLConnection
+            val inputStreamReader = InputStreamReader(urlConnection.inputStream)
+            val bufferedReader = BufferedReader(inputStreamReader)
+
+            val response = StringBuilder()
+            var line: String?
+            while (bufferedReader.readLine().also { line = it } != null) {
+                response.append(line)
+            }
+
+            bufferedReader.close()
+            inputStreamReader.close()
+
+            places.addAll(parseResponse(response.toString()))
         }
 
-        bufferedReader.close()
-        inputStreamReader.close()
-
-        return parseResponse(response.toString())
+        return places
     }
 
     override fun onPostExecute(result: ArrayList<JSONObject>) {
         super.onPostExecute(result)
         for (placeInfo in result) {
-            listener.onPlaceFound(placeInfo)
+            // Pass the resource ID of the marker icon as the second parameter
+            listener.onPlaceFound(placeInfo, iconResource)
         }
     }
 

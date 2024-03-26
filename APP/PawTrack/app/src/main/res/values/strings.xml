@@ -50,4 +50,12 @@
     <string name="string_2_50_a_month">$ 2.50 /month</string>
     <string name="btn_continue">CONTINUE</string>
     <string name="string_14_99_dollars">$ 14.99</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_track">Tracking</string>
+    <string name="nav_stat">Statistics</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_sub">Subscription</string>
+    <string name="map_parks">Parks</string>
+    <string name="map_vets">Vets</string>
+    <string name="map_shops">Shops</string>
 </resources>

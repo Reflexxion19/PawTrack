@@ -15,6 +15,8 @@ import android.location.LocationManager
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Button
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.osmdroid.views.overlay.Marker
 import org.json.JSONArray
 import org.json.JSONObject
@@ -23,16 +25,63 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+
 class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private lateinit var mapView: MapView
     private lateinit var overpassQueryTask: OverpassQueryTask
-
+    private var currentLocation = GeoPoint(0, 0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
+        val btnParks = findViewById<Button>(R.id.btnParks)
+        btnParks.setOnClickListener {
+            searchForParks()
+        }
+
+        val btnShops = findViewById<Button>(R.id.btnPetShops)
+        btnShops.setOnClickListener {
+            searchForShops()
+        }
+
+        val btnVets = findViewById<Button>(R.id.btnVets)
+        btnVets.setOnClickListener {
+            searchForVets()
+        }
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.map -> {
+                    val intent = Intent(applicationContext, MapActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.tracking -> {
+                    val intent = Intent(applicationContext, TrackingActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.statistics -> {
+                    val intent = Intent(applicationContext, StatisticsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.subscription -> {
+                    val intent = Intent(applicationContext, SubscriptionActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
         mapView = findViewById<MapView>(R.id.map)
 
         // Request location permissions
@@ -49,6 +98,37 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
             initializeMapWithLocation()
         }
     }
+
+    private fun searchForParks() {
+        overpassQueryTask = OverpassQueryTask(this, R.drawable.park_marker)
+        val parkURL = "http://overpass-api.de/api/interpreter?data=[out:json];\n" +
+                "(\n" +
+                "  node[leisure=park](around:5000,${currentLocation.latitude},${currentLocation.longitude});\n" +
+                "  node[leisure=playground](around:5000,${currentLocation.latitude},${currentLocation.longitude});\n" +
+                "  node[leisure=garden](around:5000,${currentLocation.latitude},${currentLocation.longitude});\n" +
+                ");\n" +
+                "out;\n"
+        @Suppress("DEPRECATION")
+        overpassQueryTask.execute(Pair(parkURL, R.drawable.park_marker))
+    }
+    private fun searchForShops(){
+        overpassQueryTask = OverpassQueryTask(this, R.drawable.shop_marker)
+        val shopURL = "http://overpass-api.de/api/interpreter?data=[out:json];node[shop=pet](around:5000,${currentLocation.latitude},${currentLocation.longitude});out;"
+        @Suppress("DEPRECATION")
+        overpassQueryTask.execute( Pair(shopURL, R.drawable.shop_marker))
+        // Add marker to current location
+    }
+    private fun searchForVets() {
+        // Initialize OverpassQueryTask to find veterinaries
+        overpassQueryTask = OverpassQueryTask(this, R.drawable.vet_marker)
+        val VetUrl =
+            "http://overpass-api.de/api/interpreter?data=[out:json];node[amenity=veterinary](around:5000,${currentLocation.latitude},${currentLocation.longitude});out;"
+        @Suppress("DEPRECATION")
+        overpassQueryTask.execute(Pair(VetUrl, R.drawable.vet_marker))
+    }
+
+
+
 
     private fun initializeMapWithLocation() {
         // Set the map tile source
@@ -89,22 +169,14 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
         // If location is not null, set the map center to the current location
         location?.let {
             /*:TODO replce the mock data - >>> */
-            val currentLocation = GeoPoint(54.922831,23.901035)
+            this.currentLocation = GeoPoint(location.latitude,location.longitude)
             mapController.setCenter(currentLocation)
             mapController.setZoom(16.0)
 
-            // Initialize OverpassQueryTask to find veterinaries
-            overpassQueryTask = OverpassQueryTask(this)
-            val VetUrl = "http://overpass-api.de/api/interpreter?data=[out:json];node[amenity=veterinary](around:1000,54.922831,23.901035);out;"
-            @Suppress("DEPRECATION")
-            overpassQueryTask.execute(VetUrl )
 
 
-            overpassQueryTask = OverpassQueryTask(this)
-            val parkURL = "http://overpass-api.de/api/interpreter?data=[out:json];node[amenity=park](around:1000,54.922831,23.901035);out;"
-            @Suppress("DEPRECATION")
-            overpassQueryTask.execute(parkURL)
-            // Add marker to current location
+
+
             addMarkerToCurrentLocation(currentLocation)
         }
     }
@@ -132,7 +204,8 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
         val marker = Marker(mapView)
         marker.position = currentLocation
 
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+        // Set custom marker icon
+        marker.icon = ContextCompat.getDrawable(this, R.drawable.marker_icon)
 
         mapView.overlays.add(marker)
         mapView.invalidate()
@@ -165,13 +238,14 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
         Configuration.getInstance().save(applicationContext, getPreferences(MODE_PRIVATE))
     }
 
-    override fun onPlaceFound(placeInfo: JSONObject) {
+    override fun onPlaceFound(placeInfo: JSONObject, ic: Int ) {
         val lat = placeInfo.getDouble("lat")
         val lon = placeInfo.getDouble("lon")
         val name = placeInfo.getJSONObject("tags").optString("name", "")
         val Marker = Marker(mapView)
         Marker.position = GeoPoint(lat, lon)
         Marker.title = placeInfo.optString("display_name", name)
+        Marker.icon = ContextCompat.getDrawable(this, ic)
         mapView.overlays.add(Marker)
         mapView.invalidate()
     }

@@ -1,0 +1,20 @@
+<!-- res/drawable/custom_marker.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Marker outline -->
+    <path
+        android:pathData="M12,2C8.69,2 6,4.69 6,8c0,5.25 6,13 6,13s6,-7.75 6,-13c0,-3.31 -2.69,-6 -6,-6z"
+        android:strokeColor="#000000"
+        android:strokeWidth="1"
+        android:fillColor="#FFFFFF"/>
+
+    <!-- Marker inner shape -->
+    <path
+        android:pathData="M12,4c-1.657,0 -3,1.343 -3,3s1.343,3 3,3c1.656,0 3,-1.343 3,-3s-1.344,-3 -3,-3z"
+        android:fillColor="#FF0000"/>
+
+</vector>
