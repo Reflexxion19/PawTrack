@@ -16,7 +16,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <Button
                 android:id="@+id/button"
                 android:layout_width="50dp"
@@ -39,7 +38,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/profile_top_background"/>
-
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="120dp"
@@ -49,7 +47,6 @@
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/imageView"
                 app:srcCompat="@drawable/default_profile_picture" />
-
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -61,7 +58,6 @@
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
                 />
-
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -92,7 +88,6 @@
                     android:layout_height="wrap_content"
                     android:text="2024/03/25"
                     android:layout_marginStart="8dp"/>
-
             </LinearLayout>
 
             <LinearLayout
@@ -107,8 +102,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Premium:"
-
+                    android:text="Premium:"/>
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
@@ -116,7 +110,6 @@
                     android:text="2024/03/25"
                     android:textColor="#f54242"
                     android:layout_marginStart="8dp"/>
-
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +121,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/Layout2">
-
 
                 <Button
                     android:id="@+id/button2"
@@ -190,5 +182,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

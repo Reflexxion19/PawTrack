@@ -92,7 +92,9 @@
         android:layout_height="wrap_content"
         android:text="Settings"
         android:textSize="34sp"
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
