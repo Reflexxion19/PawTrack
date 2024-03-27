@@ -45,6 +45,10 @@
         <activity android:name=".StatisticsActivity" />
         <activity android:name=".SubscriptionActivity" />
         <activity android:name=".TrackingActivity" />
+        <activity android:name=".PetProfileActivity" />
+        <activity android:name=".PetRegistrationActivity" />
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".UserPreferencesActivity" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 

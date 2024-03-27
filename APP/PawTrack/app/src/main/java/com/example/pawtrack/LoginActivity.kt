@@ -20,10 +20,6 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout)
 
-        val intent = Intent(applicationContext, HomePageActivity::class.java)
-        startActivity(intent)
-        finish()
-
         val usernameEditText = findViewById<EditText>(R.id.editTextText)
         val passwordEditText = findViewById<EditText>(R.id.editTextTextPassword)
         val buttonSignIn = findViewById<Button>(R.id.signinbutton)
@@ -73,6 +69,7 @@ class LoginActivity: AppCompatActivity() {
                             val responseBodyString = response.body?.string() ?: ""
                             if (responseBodyString == "Login successful") {
                                 val intent = Intent(applicationContext, HomePageActivity::class.java)
+                                intent.putExtra("USERNAME", username)
                                 startActivity(intent)
                                 finish()
                             }

@@ -14,11 +14,9 @@ import androidx.core.app.ActivityCompat
 import android.location.LocationManager
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.widget.Button
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.osmdroid.views.overlay.Marker
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -32,9 +30,12 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
     private lateinit var mapView: MapView
     private lateinit var overpassQueryTask: OverpassQueryTask
     private var currentLocation = GeoPoint(0, 0)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.selectedItemId = R.id.map
 
         val btnParks = findViewById<Button>(R.id.btnParks)
         btnParks.setOnClickListener {
@@ -51,7 +52,6 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
             searchForVets()
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {

@@ -3,18 +3,11 @@ package com.example.pawtrack
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarItemView
-import com.vishnusivadas.advanced_httpurlconnection.PutData
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
@@ -24,6 +17,9 @@ class HomePageActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_layout)
+        val username = intent.getStringExtra("USERNAME")
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.selectedItemId = R.id.home
 
         val CurrentTime = findViewById<TextView>(R.id.textView)
         CurrentTime.text = getCurrentTime()
@@ -37,31 +33,52 @@ class HomePageActivity: AppCompatActivity() {
             finish()
         }
 
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val petProfileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
+        petProfileButton.setOnClickListener(){
+            val intent = Intent(applicationContext, PetProfileActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
+
+        val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        profileButton.setOnClickListener(){
+            val intent = Intent(applicationContext, UserProfileActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }

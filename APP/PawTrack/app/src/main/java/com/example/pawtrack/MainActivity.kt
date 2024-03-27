@@ -1,19 +1,10 @@
 package com.example.pawtrack
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.pawtrack.ui.theme.PawTrackTheme
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
+
 
 
 
@@ -27,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
 
         // Initialize osmdroid configuration
-        Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE))
+        //Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE))
     }
     fun openMap(view: View) {
         val intent = Intent(this, MapActivity::class.java)

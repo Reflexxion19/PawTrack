@@ -73,6 +73,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.mikhaellopez:circularprogressbar:3.1.0")
     implementation("commons-codec:commons-codec:1.15")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
