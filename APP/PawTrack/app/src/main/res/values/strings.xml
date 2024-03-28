@@ -74,12 +74,18 @@
     <string name="string_account_preferences">PREFERENCES</string>
     <string name="string_log_out">LOG OUT</string>
 
+    <string name="reminder_name_hint">Name of reminder</string>
+
+    <string name="repeat_reminder_label">Repeat</string>
+    <string name="add_reminder_button">Add</string>
+    <string name="save_reminder_button">Save</string>
+
     <!-- spinner items -->
     <string name="spinner_prompt">Choose your pets activity level</string>
     <string-array name="spinner_items">
-        <item type="id" id="@+id/1">Low Activity</item>
-        <item type="id" id="@+id/2">Medium Activity</item>
-        <item type="id" id="@+id/3">High Activity</item>
+        <item>Low Activity</item>
+        <item>Medium Activity</item>
+        <item>High Activity</item>
     </string-array>
 </resources>
 
