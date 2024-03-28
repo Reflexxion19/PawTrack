@@ -74,6 +74,8 @@ dependencies {
     implementation("commons-codec:commons-codec:1.15")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.security:security-crypto:1.0.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

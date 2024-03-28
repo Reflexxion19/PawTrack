@@ -33,102 +33,11 @@
         android:id="@+id/cardView"
         android:layout_width="426dp"
         android:layout_height="0dp"
-        android:background="@drawable/edit_background_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline">
 
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="366dp"
-
-            android:layout_height="217dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/edit_background_text"
-            app:cardBackgroundColor="#FAFAFA"
-            app:cardCornerRadius="30dp">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/default_pet_picture" />
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="300dp"
-            android:text="@string/string_pet_name"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="330dp"
-            android:text="Pet name"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="370dp"
-            android:text="@string/string_your_pets_activity"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="400dp"
-            android:text="Pet activity"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="500dp"
-            android:text="@string/string_pet_trackID_label"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="530dp"
-            android:text="Pet tracker"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="570dp"
-            android:text="@string/string_pet_tracker_status"
-            android:textColor="#000000"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="600dp"
-            android:text="Pet tracker status"
-            android:textColor="#000000"
-            android:textSize="16sp" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerPetProfiles"
@@ -142,14 +51,16 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabDots"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="15dp"
             android:layout_marginTop="10dp"
             app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewPagerPetProfiles"
+            app:tabBackground="@drawable/tab_selector_dot"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"></com.google.android.material.tabs.TabLayout>
+            app:tabIndicatorHeight="0dp"
+            app:tabPadding="5dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"

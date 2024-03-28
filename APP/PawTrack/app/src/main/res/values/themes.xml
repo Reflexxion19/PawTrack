@@ -2,8 +2,6 @@
 <resources>
 
     <style name="Theme.PawTrack2" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Define your custom color attribute -->
-
     </style>
 
 </resources>

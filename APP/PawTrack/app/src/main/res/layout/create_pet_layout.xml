@@ -115,7 +115,7 @@
                         android:id="@+id/spinner"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:entries="@array/spinner_items" />
+                        android:entries="@array/spinner_items"/>
                 </LinearLayout>
 
                 <LinearLayout
