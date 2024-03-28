@@ -1,5 +1,6 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -13,6 +14,8 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 class LoginActivity: AppCompatActivity() {
 
@@ -26,20 +29,20 @@ class LoginActivity: AppCompatActivity() {
 
 
         val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
-        forgotPasswordTextView.setOnClickListener(){
+        forgotPasswordTextView.setOnClickListener{
             val intent = Intent(applicationContext, RemindPasswordActivity::class.java)
             startActivity(intent)
             finish()
         }
         val registerTextView = findViewById<TextView>(R.id.textView4)
-        registerTextView.setOnClickListener(){
+        registerTextView.setOnClickListener{
             val intent = Intent(applicationContext, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         buttonSignIn.setOnClickListener{
-            if(!usernameEditText.text.isEmpty() || !passwordEditText.text.isEmpty())
+            if(usernameEditText.text.isNotEmpty() || passwordEditText.text.isNotEmpty())
             {
                 val username = usernameEditText.text.toString()
                 val password = passwordEditText.text.toString()
@@ -68,6 +71,8 @@ class LoginActivity: AppCompatActivity() {
                         runOnUiThread {
                             val responseBodyString = response.body?.string() ?: ""
                             if (responseBodyString == "Login successful") {
+                                val token = "abcd123"
+                                saveToken(this@LoginActivity, token, username)
                                 val intent = Intent(applicationContext, HomePageActivity::class.java)
                                 intent.putExtra("USERNAME", username)
                                 startActivity(intent)
@@ -84,6 +89,22 @@ class LoginActivity: AppCompatActivity() {
             {
                 Toast.makeText(applicationContext,"All fields are required", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+    fun saveToken (context: Context, token: String, username: String)
+    {
+        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val sharedPreferences = EncryptedSharedPreferences.create(
+            "user_preferences",
+            masterKey,
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+        with(sharedPreferences.edit()){
+            putString("user_token", token)
+            putString("USERNAME", username)
+            apply()
         }
     }
 }

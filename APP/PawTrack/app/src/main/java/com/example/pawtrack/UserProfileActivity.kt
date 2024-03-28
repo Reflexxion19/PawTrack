@@ -1,10 +1,13 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 class UserProfileActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +16,7 @@ class UserProfileActivity: AppCompatActivity() {
         val username = intent.getStringExtra("USERNAME")
 
         val usernameText = findViewById<TextView>(R.id.textView)
-        usernameText.text = username;
+        usernameText.text = username
 
         val preferencesButton = findViewById<Button>(R.id.button4)
         preferencesButton.setOnClickListener() {
@@ -28,6 +31,28 @@ class UserProfileActivity: AppCompatActivity() {
             intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
+        }
+        val logOutButton = findViewById<Button>(R.id.button5)
+        logOutButton.setOnClickListener{
+            clearAllPreferences(applicationContext)
+            val intent = Intent(applicationContext, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+    fun clearAllPreferences(context: Context) {
+        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val sharedPreferences = EncryptedSharedPreferences.create(
+            "user_preferences",
+            masterKey,
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+
+        with(sharedPreferences.edit()){
+            clear()
+            apply()
         }
     }
 }
