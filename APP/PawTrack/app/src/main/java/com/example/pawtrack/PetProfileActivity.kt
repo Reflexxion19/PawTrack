@@ -63,9 +63,6 @@ class PetProfileActivity: AppCompatActivity() {
 
         performGetRequest(username, object : OnDataFetched {
             override fun onDataFetched(parsedList: List<Map<String, String?>>) {
-                val petName = parsedList.joinToString(", ") { it["n"] ?: "Unknown" }
-                val petNameTextView = findViewById<TextView>(R.id.PetNameText)
-                //petNameTextView.text = petName
             }
         })
     }
@@ -106,19 +103,6 @@ class PetProfileActivity: AppCompatActivity() {
                     runOnUiThread {
                         onDataFetched.onDataFetched(parsedList)
                         setupViewPager(parsedList)
-                        Toast.makeText(
-                            applicationContext,
-                            "Data fetched successfully",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                } else {
-                    runOnUiThread {
-                        Toast.makeText(
-                            applicationContext,
-                            "Error fetching data",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
             }
@@ -170,19 +154,3 @@ class PetProfileActivity: AppCompatActivity() {
         })
     }
 }
-/*class PetPagerAdapter(
-    fragmentActivity: FragmentActivity,
-    private val petsList: List<Map<String, String?>>
-) : FragmentStateAdapter(fragmentActivity) {
-
-    override fun getItemCount(): Int = petsList.size
-
-    override fun createFragment(position: Int): Fragment {
-        val petName = petsList[position]["n"] ?: "Unknown"
-        val petActivity = petsList[position]["a_c"] ?: "No Activity Set"
-        val petTrackerID = petsList[position]["t_i"] ?: "No Tracker Set"
-        val petTrackerStatus = petsList[position]["t_s"] ?: "No Tracker Set"
-        val petPhotoBitmapURL = petsList[position]["p_p"] ?: ""
-        return PetDetailFragment.newInstance(petName, petActivity, petTrackerID, petTrackerStatus, petPhotoBitmapURL)
-    }
-}*/
