@@ -1,30 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_reminder_setting.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextTitle"
+    <!-- RecyclerView to display current reminders -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewReminders"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/string_enter_title" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/fabAddReminder" />
 
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/buttonSetReminder"
+    <!-- Floating Action Button for adding new reminders -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_set_reminder" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/baseline_add_24"
+        android:contentDescription="@string/add_reminder_button"/>
 
-</LinearLayout>
+    <!-- Bottom Sheet for adding a new reminder -->
+    <LinearLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Hour and Minute Picker -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Hour Picker -->
+            <NumberPicker
+                android:id="@+id/npHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:descendantFocusability="blocksDescendants"/>
+
+            <!-- Minute Picker -->
+            <NumberPicker
+                android:id="@+id/npMinute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:descendantFocusability="blocksDescendants"/>
+        </LinearLayout>
+
+        <!-- Name EditText -->
+        <EditText
+            android:id="@+id/etReminderName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/reminder_name_hint"/>
+
+        <!-- Repeat Checkbox -->
+        <CheckBox
+            android:id="@+id/cbRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_reminder_label"/>
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_reminder_button"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -74,8 +74,11 @@
     <string name="string_account_preferences">PREFERENCES</string>
     <string name="string_log_out">LOG OUT</string>
 
+    <string name="reminder_name_hint">Name of reminder</string>
 
-
+    <string name="repeat_reminder_label">Repeat</string>
+    <string name="add_reminder_button">Add</string>
+    <string name="save_reminder_button">Save</string>
 
     <!-- spinner items -->
     <string name="spinner_prompt">Choose your pets activity level</string>
