@@ -13,7 +13,7 @@ class UserPreferencesActivity:AppCompatActivity() {
 
 
         val backButton = findViewById<Button>(R.id.button2)
-        backButton.setOnClickListener() {
+        backButton.setOnClickListener {
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
             intent.putExtra("USERNAME", username)
             startActivity(intent)
