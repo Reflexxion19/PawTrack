@@ -34,6 +34,7 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
+        val username = intent.getStringExtra("USERNAME")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.map
 
@@ -56,26 +57,31 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
+                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
