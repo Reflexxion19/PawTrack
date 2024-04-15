@@ -1,18 +1,21 @@
 package com.example.pawtrack
 
 import android.content.Context
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-
+import androidx.core.splashscreen.SplashScreen;
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModel
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val (token, username) = getToken(applicationContext)
         if (token.isNullOrEmpty() || username.isNullOrEmpty()) {
             val loginIntent = Intent(this, LoginActivity::class.java)
