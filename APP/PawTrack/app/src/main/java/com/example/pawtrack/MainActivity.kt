@@ -4,16 +4,52 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.OvershootInterpolator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import androidx.core.splashscreen.SplashScreen;
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
+import androidx.activity.viewModels
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import android.animation.ObjectAnimator
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel by viewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {
+            setKeepOnScreenCondition{
+                !viewModel.isReady.value
+            }
+            setOnExitAnimationListener{
+                    screen -> val zoomX = ObjectAnimator.ofFloat(
+                screen.iconView,
+                View.SCALE_X,
+                0.4f,
+                0.0f
+            )
+                zoomX.interpolator = OvershootInterpolator()
+                zoomX.duration = 500L
+                zoomX.doOnEnd { screen.remove() }
+                val zoomY = ObjectAnimator.ofFloat(
+                    screen.iconView,
+                    View.SCALE_X,
+                    0.4f,
+                    0.0f
+                )
+                zoomY.interpolator = OvershootInterpolator()
+                zoomY.duration = 500L
+                zoomY.doOnEnd { screen.remove() }
+
+                zoomX.start()
+                zoomY.start()
+            }
+        }
         super.onCreate(savedInstanceState)
 
         val (token, username) = getToken(applicationContext)
