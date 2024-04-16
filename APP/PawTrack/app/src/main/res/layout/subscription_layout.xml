@@ -26,6 +26,15 @@
         app:layout_constraintGuide_begin="60dp" />
 
     <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="426dp"
         android:layout_height="0dp"
