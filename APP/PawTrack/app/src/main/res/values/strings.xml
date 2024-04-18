@@ -88,6 +88,7 @@
         <item>High Activity</item>
     </string-array>
     <string name="string_pet_image">Pet image</string>
+    <string name="string_edit">Edit</string>
 </resources>
 
 

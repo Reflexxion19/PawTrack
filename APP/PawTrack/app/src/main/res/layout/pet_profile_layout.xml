@@ -19,7 +19,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="15dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_50"
         android:backgroundTint="@color/white"
         android:drawableStart="@drawable/baseline_arrow_back_24"
         android:drawableTint="@color/app_theme"
@@ -93,6 +93,17 @@
                 app:layout_constraintTop_toTopOf="@+id/viewPagerPetProfiles"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingEditButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="48dp"
+                android:layout_marginBottom="48dp"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/baseline_edit_24" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floatingActionButton"
