@@ -89,6 +89,13 @@
     </string-array>
     <string name="string_pet_image">Pet image</string>
     <string name="string_edit">Edit</string>
+    <string name="string_delete_account">Delete account</string>
+    <string name="string_change_email">Change email</string>
+    <string name="string_change_password">Change password</string>
+    <string name="string_enter_new_email">Enter your new email</string>
+    <string name="string_change_email_hint">Enter your current email, new email and password to change your email</string>
+    <string name="string_enter_new_password">Enter your new password</string>
+    <string name="string_change_password_hint">To change your password enter your email, current and new password</string>
 </resources>
 
 
