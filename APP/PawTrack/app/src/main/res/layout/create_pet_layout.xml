@@ -61,7 +61,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
                 <Button
-                    android:id="@+id/button6"
+                    android:id="@+id/UploadPhotoButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/round_button_outline_40"
