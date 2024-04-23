@@ -2,19 +2,43 @@ package com.example.pawtrack
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 public class TrackingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_tracking)
+        setContentView(R.layout.tracking_layout)
         val username = intent.getStringExtra("USERNAME")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.tracking
 
+        val petprofileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
+        petprofileButton.setOnClickListener(){
+            val intent = Intent(applicationContext, PetProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        profileButton.setOnClickListener(){
+            val intent = Intent(applicationContext, UserProfileActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
+
+        val trackingButton = findViewById<Button>(R.id.button6)
+        trackingButton.setOnClickListener(){
+            val intent = Intent(applicationContext, TrackingMapActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
