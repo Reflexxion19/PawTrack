@@ -85,30 +85,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="110dp"
-                android:text="@string/string_steps"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="130dp"
-                android:text="152"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="110dp"
                 android:text="@string/string_distance"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -118,16 +99,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="170dp"
+                android:layout_marginTop="130dp"
                 android:text="0,09 km" />
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="187dp"
+                android:layout_marginStart="161dp"
                 android:layout_marginTop="25dp"
-                android:text="@string/string_monday"
+                android:text="@string/string_today"
                 android:textColor="#000000"
                 android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
