@@ -2,23 +2,28 @@ package com.example.pawtrack
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Bundle
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
-import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
-import org.osmdroid.util.GeoPoint
-import androidx.core.content.ContextCompat
-import androidx.core.app.ActivityCompat
-import android.location.LocationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.os.Bundle
+import android.os.Environment
+import android.os.StrictMode
+import android.preference.PreferenceManager
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.contentColorFor
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.osmdroid.views.overlay.Marker
 import org.json.JSONObject
+import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Marker
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -26,14 +31,34 @@ import java.net.URL
 
 class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener {
 
+
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
+
     private lateinit var mapView: MapView
     private lateinit var overpassQueryTask: OverpassQueryTask
     private var currentLocation = GeoPoint(0, 0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+
+        // Load configuration and preferences
+        val ctx: Context = applicationContext
+        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx))
+
+        val osmdroidBasePath = File(
+            Environment.getExternalStorageDirectory().absolutePath,
+            "osmdroid"
+        )
+        val osmdroidTileCacheDir = File(osmdroidBasePath, "tiles")
+        Configuration.getInstance().osmdroidBasePath = osmdroidBasePath
+        Configuration.getInstance().osmdroidTileCache = osmdroidTileCacheDir
+
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_map)
+
+
         val username = intent.getStringExtra("USERNAME")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.map
@@ -138,10 +163,14 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
 
     private fun initializeMapWithLocation() {
         // Set the map tile source
+        mapView = findViewById(R.id.map)
         mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
 
         // Enable the built-in zoom controls
-        mapView.setBuiltInZoomControls(true)
+        mapView.setBuiltInZoomControls(false)
+
+        // Enable multi-touch zoom gestures
+        mapView.setMultiTouchControls(true)
 
         // Get the map controller
         val mapController = mapView.controller
@@ -178,10 +207,6 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
             this.currentLocation = GeoPoint(location.latitude,location.longitude)
             mapController.setCenter(currentLocation)
             mapController.setZoom(16.0)
-
-
-
-
 
             addMarkerToCurrentLocation(currentLocation)
         }

@@ -26,9 +26,20 @@
         app:layout_constraintGuide_begin="60dp" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline" />
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="426dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/edit_background_text"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="70dp"
-                android:text="@string/string_move"
+                android:text="@string/string_calories_burned"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -74,30 +85,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="110dp"
-                android:text="@string/string_steps"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="130dp"
-                android:text="152"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="110dp"
                 android:text="@string/string_distance"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -107,16 +99,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="170dp"
+                android:layout_marginTop="130dp"
                 android:text="0,09 km" />
 
             <TextView
                 android:id="@+id/textView22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="187dp"
+                android:layout_marginStart="161dp"
                 android:layout_marginTop="25dp"
-                android:text="@string/string_monday"
+                android:text="@string/string_today"
                 android:textColor="#000000"
                 android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
@@ -281,8 +273,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="15dp"
         android:text="@string/string_this_weeks_activity"
         android:textColor="#333030"
         android:textSize="20sp"
@@ -295,15 +285,12 @@
         android:id="@+id/floatingActionButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="340dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:clickable="true"
         app:backgroundTint="@color/app_theme_light"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_accessibility_24" />
 
@@ -311,14 +298,12 @@
         android:id="@+id/pet_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="340dp"
-        android:layout_marginBottom="12dp"
         android:clickable="true"
         app:backgroundTint="@color/app_theme_light"
         app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintHorizontal_bias="0.423"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/sound_detection_dog_barking" />

@@ -55,104 +55,33 @@
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/imageView"
                 app:srcCompat="@drawable/default_profile_picture" />
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_nickname"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+
+            <Button
+                android:id="@+id/UploadPhotoButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="85dp"
+                android:background="@drawable/round_button_outline_40"
+                android:drawableStart="@drawable/baseline_add_a_photo_24"
+                android:drawableTint="@color/app_theme"
+                android:paddingStart="8dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp"
+                android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                />
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/string_email_example"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView"
-                app:layout_constraintStart_toStartOf="@+id/textView"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
             <LinearLayout
-                android:id="@+id/Layout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/textView2"
-                app:layout_constraintStart_toStartOf="@id/textView2"
-                app:layout_constraintEnd_toEndOf="@id/textView2">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="@string/string_created_label" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="@string/string_date_example"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/Layout2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/Layout1"
-                app:layout_constraintStart_toStartOf="@id/Layout1"
-                app:layout_constraintEnd_toEndOf="@id/Layout1">
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_premium_label"
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_date_example"
-                    android:textColor="#f54242"
-                    android:layout_marginStart="8dp"
-                    android:textSize="12sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Layout2">
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_background_1"
-                    android:drawableStart="@drawable/ic_2"
-                    android:drawablePadding="20dp"
-                    android:paddingStart="28dp"
-                    android:text="@string/string_billings"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
+                app:layout_constraintTop_toBottomOf="@+id/UploadPhotoButton">
 
                 <Button
                     android:id="@+id/button3"
@@ -165,12 +94,12 @@
                     android:background="@drawable/btn_background_1"
                     android:drawableStart="@drawable/ic_3"
                     android:drawablePadding="20dp"
-                    android:paddingStart="28dp"
-                    android:text="@string/string_account_settings"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
                     android:gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    android:paddingStart="28dp"
+                    android:text="@string/string_change_email"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button4"
@@ -183,12 +112,12 @@
                     android:background="@drawable/btn_background_1"
                     android:drawableStart="@drawable/ic_1"
                     android:drawablePadding="20dp"
-                    android:paddingStart="28dp"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:text="@string/string_account_preferences"
                     android:gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    android:paddingStart="28dp"
+                    android:text="@string/string_change_password"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button5"
@@ -199,14 +128,15 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background_1"
-                    android:text="@string/string_log_out"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#D80202"
                     android:gravity="center_vertical|center_horizontal"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    android:text="@string/string_delete_account"
+                    android:textColor="#D80202"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 </ScrollView>
