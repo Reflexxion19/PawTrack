@@ -30,13 +30,7 @@ class HomePageActivity: AppCompatActivity() {
         CurrentTime.text = getCurrentTime()
 
 
-        val reminderButton = findViewById<Button>(R.id.button5)
 
-        reminderButton.setOnClickListener(){
-            val intent = Intent(applicationContext, ReminderSettingActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         val petProfileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
         petProfileButton.setOnClickListener(){

@@ -1,17 +1,21 @@
 package com.example.pawtrack
+
+
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.example.pawtrack.AlarmReceiver
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 
-class AndroidAlarmScheduler(
-    private val context: Context
-): AlarmScheduler {
+class AndroidAlarmScheduler(private val context: Context) {
 
-    private val alarmManager = context.getSystemService(AlarmManager::class.java)
+    private val alarmManager: AlarmManager =
+        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    override fun Schedule(item: AlarmItem) {
+    fun schedule(item: AlarmItem) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("EXTRA_MESSAGE", item.message)
         }
@@ -22,8 +26,11 @@ class AndroidAlarmScheduler(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Calculate the milliseconds until the alarm time
-        val alarmTimeMillis = item.time.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        // Calculate ms
+        val alarmTimeMillis = item.time.atDate(LocalDate.now())
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
 
         // Schedule the alarm
         alarmManager.setExactAndAllowWhileIdle(
@@ -33,7 +40,7 @@ class AndroidAlarmScheduler(
         )
     }
 
-    override fun Cancel(item: AlarmItem) {
+    fun cancel(item: AlarmItem) {
         val intent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context,

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -32,19 +33,19 @@
                 android:id="@+id/button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/rounded_button_50"
                 android:backgroundTint="@color/white"
                 android:drawableStart="@drawable/baseline_arrow_back_24"
                 android:drawableTint="@color/app_theme"
-                android:textSize="30sp"
                 android:paddingStart="2dp"
-                android:paddingBottom="0dp"
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
+                android:paddingBottom="0dp"
+                android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -52,9 +53,12 @@
                 android:layout_height="120dp"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.512"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.916"
                 app:srcCompat="@drawable/default_profile_picture" />
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -64,8 +68,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/imageView2"
                 app:layout_constraintStart_toStartOf="@+id/imageView2"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -81,24 +85,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/textView2"
+                app:layout_constraintEnd_toEndOf="@id/textView2"
                 app:layout_constraintStart_toStartOf="@id/textView2"
-                app:layout_constraintEnd_toEndOf="@id/textView2">
+                app:layout_constraintTop_toBottomOf="@id/textView2">
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="@string/string_created_label" />
+                    android:text="@string/string_created_label"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:layout_marginStart="8dp"
                     android:text="@string/string_date_example"
-                    android:layout_marginStart="8dp"/>
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -106,30 +110,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/Layout1"
+                app:layout_constraintEnd_toEndOf="@id/Layout1"
                 app:layout_constraintStart_toStartOf="@id/Layout1"
-                app:layout_constraintEnd_toEndOf="@id/Layout1">
+                app:layout_constraintTop_toBottomOf="@id/Layout1">
+
                 <TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/string_premium_label"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:text="@string/string_date_example"
                     android:textColor="#f54242"
-                    android:layout_marginStart="8dp"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -137,45 +143,63 @@
                 app:layout_constraintTop_toBottomOf="@+id/Layout2">
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/reminder"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background_1"
                     android:drawableStart="@drawable/ic_2"
                     android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
+                    android:paddingStart="28dp"
+                    android:text="@string/btn_set_reminder"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/btn_background_1"
+                    android:drawableStart="@drawable/ic_2"
+                    android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
                     android:paddingStart="28dp"
                     android:text="@string/string_billings"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button3"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background_1"
                     android:drawableStart="@drawable/ic_3"
                     android:drawablePadding="20dp"
+                    android:gravity="center_vertical"
+                    android:padding="8dp"
                     android:paddingStart="28dp"
                     android:text="@string/string_account_settings"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button4"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="55dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="32dp"
@@ -183,12 +207,12 @@
                     android:background="@drawable/btn_background_1"
                     android:drawableStart="@drawable/ic_1"
                     android:drawablePadding="20dp"
-                    android:paddingStart="28dp"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:text="@string/string_account_preferences"
                     android:gravity="center_vertical"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    android:paddingStart="28dp"
+                    android:text="@string/string_account_preferences"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button5"
@@ -199,15 +223,15 @@
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_background_1"
-                    android:text="@string/string_log_out"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="#D80202"
                     android:gravity="center_vertical|center_horizontal"
-                    android:padding="8dp" />
+                    android:padding="8dp"
+                    android:text="@string/string_log_out"
+                    android:textColor="#D80202"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+    </LinearLayout>
 </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

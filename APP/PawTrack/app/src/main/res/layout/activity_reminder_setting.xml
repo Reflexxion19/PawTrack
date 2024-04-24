@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!-- RecyclerView to display current reminders -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewReminders"
@@ -11,18 +11,24 @@
         android:layout_above="@id/fabAddReminder" />
 
     <!-- Floating Action Button for adding new reminders -->
+
+    <!-- Bottom Sheet for adding a new reminder -->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/baseline_add_24"
-        android:contentDescription="@string/add_reminder_button"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="105dp"
+        android:contentDescription="@string/add_reminder_button"
+        android:src="@drawable/baseline_add_24" />
 
-    <!-- Bottom Sheet for adding a new reminder -->
     <LinearLayout
+        android:layout_alignParentTop="true"
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,30 +37,10 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <!-- Hour and Minute Picker -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!-- Hour Picker -->
-            <NumberPicker
-                android:id="@+id/npHour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:descendantFocusability="blocksDescendants"/>
-
-            <!-- Minute Picker -->
-            <NumberPicker
-                android:id="@+id/npMinute"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:descendantFocusability="blocksDescendants"/>
-        </LinearLayout>
-
-        <!-- Name EditText -->
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/etReminderName"
             android:layout_width="match_parent"
@@ -74,6 +60,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save_reminder_button"/>
+
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginBottom="-1dp"
+        android:background="#FFFFFF"
+        android:clickable="true"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/button_nav_menu" />
+
 
 </RelativeLayout>

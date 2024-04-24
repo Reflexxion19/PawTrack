@@ -1,131 +1,200 @@
 package com.example.pawtrack
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.core.app.NotificationCompat
-import com.example.pawtrack.ui.theme.PawTrackTheme
-import java.time.LocalDateTime
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TimePicker
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
+import java.time.LocalTime
+import android.Manifest
+import android.content.Intent
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class ReminderSettingActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+class ReminderSettingActivity : AppCompatActivity() {
+
+    private lateinit var scheduler: AndroidAlarmScheduler
+    private lateinit var adapter: ReminderAdapter
+    private lateinit var bottomSheet: LinearLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var fabAddReminder: FloatingActionButton
+    private lateinit var btnSaveReminder: Button
+    private lateinit var etReminderName: EditText
+    private lateinit var cbRepeat: CheckBox
+    private lateinit var timePicker: TimePicker
+    private var selectedTime: LocalTime = LocalTime.now() // Initialize with current time
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scheduler = AndroidAlarmScheduler(this)
-        var alarmItem: AlarmItem? = null
-        setContent {
-            PawTrackTheme {
-                var hourText by remember {
-                    mutableStateOf("")
-                }
-                var minuteText by remember {
-                    mutableStateOf("")
-                }
-                var message by remember {
-                    mutableStateOf("")
-                }
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    OutlinedTextField(
-                        value = hourText,
-                        onValueChange = { hourText = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = {
-                            Text(text = "Hour (0-23)")
-                        }
-                    )
-                    OutlinedTextField(
-                        value = minuteText,
-                        onValueChange = { minuteText = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = {
-                            Text(text = "Minute (0-59)")
-                        }
-                    )
-                    OutlinedTextField(
-                        value = message,
-                        onValueChange = { message = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        placeholder = {
-                            Text(text = "Message")
-                        }
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Button(onClick = {
-                            val currentDateTime = LocalDateTime.now()
-                            val hour = hourText.toIntOrNull() ?: return@Button
-                            val minute = minuteText.toIntOrNull() ?: return@Button
+        setContentView(R.layout.activity_reminder_setting)
 
-                            val selectedDateTime = currentDateTime.withHour(hour).withMinute(minute)
-                            if (selectedDateTime.isBefore(currentDateTime)) {
-                                // If selected time is before current time, set it for the next day
-                                selectedDateTime.plusDays(1)
-                            }
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val username = intent.getStringExtra("USERNAME")
 
-                            alarmItem = AlarmItem(
-                                time = selectedDateTime,
-                                message = message
-                            )
-                            alarmItem?.let(scheduler::Schedule)
-                            sendNotification(message)
-                            hourText = ""
-                            minuteText = ""
-                            message = ""
-                        }) {
-                            Text(text = "Schedule")
-                        }
-                        Button(onClick = {
-                            alarmItem?.let(scheduler::Cancel)
-                        }) {
-                            Text(text = "Cancel")
-                        }
-                    }
+
+
+
+        scheduler = AndroidAlarmScheduler(this)
+        adapter = ReminderAdapter(emptyList())
+
+        // Find views
+        recyclerView = findViewById(R.id.recyclerViewReminders)
+        fabAddReminder = findViewById(R.id.fabAddReminder)
+        bottomSheet = findViewById(R.id.bottomSheet)
+        btnSaveReminder = findViewById(R.id.btnSaveReminder)
+        etReminderName = findViewById(R.id.etReminderName)
+        cbRepeat = findViewById(R.id.cbRepeat)
+        timePicker = findViewById(R.id.timePicker)
+
+        // Set up RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    val intent = Intent(applicationContext, HomePageActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    true
                 }
+                R.id.map -> {
+                    val intent = Intent(applicationContext, MapActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.tracking -> {
+                    val intent = Intent(applicationContext, TrackingActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.statistics -> {
+                    val intent = Intent(applicationContext, StatisticsActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    true
+                }
+                R.id.subscription -> {
+                    val intent = Intent(applicationContext, SubscriptionActivity::class.java)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
             }
+        }
+
+        // Set up FAB click listener
+        fabAddReminder.setOnClickListener {
+            if (bottomSheet.visibility == View.VISIBLE) {
+                bottomSheet.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE // Show the RecyclerView
+            } else {
+                bottomSheet.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE // Hide the RecyclerView
+            }
+        }
+
+        // Set up Save Button click listener
+        btnSaveReminder.setOnClickListener {
+            val message = etReminderName.text.toString()
+            val repeat = cbRepeat.isChecked
+
+            // Schedule alarm with selected time
+            val alarmItem = AlarmItem(
+                time = selectedTime,
+                message = message,
+                repeat = repeat
+            )
+            scheduler.schedule(alarmItem)
+            // Save the alarm
+            saveAlarm(alarmItem)
+
+            // Clear input fields
+            etReminderName.setText("")
+            cbRepeat.isChecked = false
+
+            // Fetch and show list of already set alarms
+            showAlreadySetAlarms()
+        }
+
+        // Set up TimePicker listener
+        timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
+            selectedTime = LocalTime.of(hourOfDay, minute)
         }
     }
 
-    private fun sendNotification(message: String) {
-        val channelId = "default_channel_id"
-        val channelName = "Default Channel"
-        val notificationId = 1
+    override fun onResume() {
+        super.onResume()
+        requestNotificationPermission()
+    }
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    private fun requestNotificationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request notification permission
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                NOTIFICATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
 
-        // Create Notification Channel for Android O and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-            notificationManager.createNotificationChannel(channel)
+    private fun saveAlarm(alarmItem: AlarmItem) {
+        val alarms = fetchAlreadySetAlarms().toMutableList()
+        val toSave = SavedAlarm(
+                alarmItem.time.toString(),
+                 alarmItem.message,
+                alarmItem.repeat
+
+        )
+        alarms.add(toSave)
+
+        for(alarm in alarms)
+        {
+            Log.d("Alarm time:", alarm.time.toString())
         }
 
-        // Build notification
-        val builder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Reminder")
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = gson.toJson(alarms)
+        sharedPreferences.edit().putString("alarms", json).apply()
+        adapter.updateData(alarms)
+    }
 
-        // Notify
-        notificationManager.notify(notificationId, builder.build())
+    private fun fetchAlreadySetAlarms(): List<SavedAlarm> {
+        val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences.getString("alarms", null)
+        val type: Type = object : TypeToken<List<SavedAlarm>>() {}.type
+        return gson.fromJson(json, type) ?: emptyList()
+    }
+
+    private fun showAlreadySetAlarms() {
+        // Fetch the list of already set alarms
+        val alarms = fetchAlreadySetAlarms()
+
+        // Update the adapter with the list of alarms
+        adapter.updateData(alarms)
     }
 }

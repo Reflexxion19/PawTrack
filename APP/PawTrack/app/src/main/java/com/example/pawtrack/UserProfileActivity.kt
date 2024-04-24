@@ -39,6 +39,13 @@ class UserProfileActivity: AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        val reminderButton = findViewById<Button>(R.id.reminder)
+
+        reminderButton.setOnClickListener(){
+            val intent = Intent(applicationContext, ReminderSettingActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
     fun clearAllPreferences(context: Context) {
         val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)

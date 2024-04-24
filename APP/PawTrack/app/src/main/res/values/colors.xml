@@ -13,4 +13,6 @@
     <color name="app_theme_light">#f6fbff</color>
     <color name="edit_text_border">#03A9F4</color>
     <color name="edit_text_background">#f6fbff</color>
+    <color name="fill_color">#736693</color>
+    <color name="outline_color">#00758e</color>
 </resources>
