@@ -193,12 +193,6 @@ class TrackingMapActivity : AppCompatActivity() {
 
         updateButtonAndIcon(startButton)
     }
-    /*
-    d_w = 0
-    c_b = 50
-    date = startTime
-    active_time = (endTime - startTime) / 1000
-     */
     private fun startLocationPolling() {
         val timer = Timer()
         timer.schedule(timerTask {

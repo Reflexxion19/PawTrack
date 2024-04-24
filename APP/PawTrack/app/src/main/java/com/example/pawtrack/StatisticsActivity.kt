@@ -149,8 +149,7 @@ class StatisticsActivity: AppCompatActivity() {
             }
     }
     fun updateTextViewsWithData(data: Map<String, String?>) {
-        val today = Calendar.getInstance()
-        val dayOfWeekNumber = today.get(Calendar.DAY_OF_WEEK)
+
         val caloriesBurnedTextView: TextView = findViewById(R.id.textView10)
         val distanceWalkedTextView: TextView = findViewById(R.id.textView14)
         caloriesBurnedTextView.text = data["calories_burned"] ?: "0"
@@ -159,9 +158,17 @@ class StatisticsActivity: AppCompatActivity() {
 
     }
     fun updateCircularProgressBars(dataList: List<Map<String, String?>>) {
-        val progressBarIds = listOf(R.id.progressBar2, R.id.progressBar4, R.id.progressBar5, R.id.progressBar6, R.id.progressBar7, R.id.progressBar8, R.id.progressBar9, R.id.progressBar10)
+        val today = Calendar.getInstance()
+        val dayOfWeekNumber = today.get(Calendar.DAY_OF_WEEK)
+        val progressBarIds = listOf(R.id.progressBar2, R.id.progressBar4, R.id.progressBar5, R.id.progressBar6, R.id.progressBar7, R.id.progressBar8, R.id.progressBar10)
 
         progressBarIds.forEachIndexed { index, progressBarId ->
+            if(index == dayOfWeekNumber)
+            {
+                val mainProgressBar = findViewById<CircularProgressBar>(R.id.progressBar9)
+                val caloriesBurned = dataList.getOrNull(index)?.get("calories_burned")?.toIntOrNull() ?: 0
+                mainProgressBar.progress = caloriesBurned.toFloat()
+            }
             val progressBar = findViewById<CircularProgressBar>(progressBarId)
             val caloriesBurned = dataList.getOrNull(index)?.get("calories_burned")?.toIntOrNull() ?: 0
 
