@@ -73,6 +73,76 @@ class DB_handler{
         }
     }
 
+    public function get_statistics($pet_id){
+        $sql = "SELECT `date`, `distance_walked`, `calories_burned`
+            FROM `activity_report`
+            WHERE `date` >= DATE_SUB(CURRENT_DATE, INTERVAL WEEKDAY(CURRENT_DATE) DAY)
+            AND `date` < DATE_ADD(CURRENT_DATE, INTERVAL (7 - WEEKDAY(CURRENT_DATE)) DAY)
+            AND `fk_Petid` = $pet_id;";
+        $result = mysqli_query($this->conn, $sql);
+
+        $d_array = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0); // distance_walked array
+        $c_array = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0); // calories_burned array
+        
+        while($row = mysqli_fetch_assoc($result))
+        {
+            if (date('w', strtotime($row['date'])) == 1){
+                $d_array[1] += $row['distance_walked'];
+                $c_array[1] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 2){
+                $d_array[2] += $row['distance_walked'];
+                $c_array[2] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 3){
+                $d_array[3] += $row['distance_walked'];
+                $c_array[3] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 4){
+                $d_array[4] += $row['distance_walked'];
+                $c_array[4] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 5){
+                $d_array[5] += $row['distance_walked'];
+                $c_array[5] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 6){
+                $d_array[6] += $row['distance_walked'];
+                $c_array[6] += $row['calories_burned'];
+            }
+            else if (date('w', strtotime($row['date'])) == 7){
+                $d_array[7] += $row['distance_walked'];
+                $c_array[7] += $row['calories_burned'];
+            }
+        }
+
+        for($i = 1; $i <= 7; $i++){
+            echo "d_w=" . $d_array[$i] . ";"; // distance walked
+            echo "c_b=" . $c_array[$i] . ";\n"; // calories burned
+        }
+    }
+
+    public function gps_data_processing($db, $decoded_json){
+        $count = $decoded_json->c;
+        $fk = $decoded_json->f_a_r;
+
+        for($i = 1; $i <= $count; $i++){
+            $arr = $decoded_json->$i;
+            $lat = $arr[0];
+            $long = $arr[1];
+            $dateTime = $arr[2];
+
+            $data = array('`time`' => $dateTime, '`lat`' => $lat, '`long`' => $long, '`fk_Activity_Reportid`' => $fk);
+            $db->insert("gps_data", $data);
+        }
+    }
+
+    public function respond_report_activity_id($date){
+        $sql = "SELECT `id`  FROM `activity_report` WHERE `date`='$date'";
+        $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['id'];
+        echo $result;
+    }
+
     // Insert data
     public function insert($table, $data) {
         $columns = array_keys($data);
@@ -106,18 +176,6 @@ if($db->conn){
         $decoded_json = json_decode($post_json, false);
 
         if($decoded_json != ""){
-            if($decoded_json->type == "g_d"){ # gps_data
-                $lo = $decoded_json->lo;
-                $la = $decoded_json->la;
-                $dt = $decoded_json->dt;
-                $far = $decoded_json->f_a_r;
-    
-                $data = array('`long`' => $lo, '`lat`' => $la,
-                'time' => $dt, '`fk_Activity_Reportid`' => $far);
-    
-                $db->insert("gps_data", $data);
-            }
-    
             if($decoded_json->type == "u_r"){ # user registration
                 $username = $decoded_json->u;
                 $password = $decoded_json->p;
@@ -153,6 +211,24 @@ if($db->conn){
 
                 $db->insert("pet", $data);
             }
+
+            if($decoded_json->type == "r"){ # activity_report
+                $dateTime = $decoded_json->dt;
+                $distance_walked = $decoded_json->d_w;
+                $calories_burned = $decoded_json->c_b;
+                $active_time = $decoded_json->a_t;
+                $fk = $decoded_json->p;
+
+                $data = array('`date`' => $dateTime, '`distance_walked`' => $distance_walked, '`calories_burned`' => $calories_burned,
+                '`active_time`' => $active_time, '`fk_Petid`' => $fk);
+
+                $db->insert("activity_report", $data);
+                $db->respond_report_activity_id($dateTime);
+            }
+
+            if($decoded_json->type == "g_d"){ # gps_data
+                $db->gps_data_processing($db, $decoded_json);
+            }
         }
     }
 
@@ -171,6 +247,12 @@ if($db->conn){
                 $owner_username = $parsed_data['u'];
 
                 $db->list_pets($owner_username);
+            }
+
+            if($parsed_data['type'] == 'g_s'){ # get statistics
+                $pet_id = $parsed_data['p'];
+
+                $db->get_statistics($pet_id);
             }
         }
     }
