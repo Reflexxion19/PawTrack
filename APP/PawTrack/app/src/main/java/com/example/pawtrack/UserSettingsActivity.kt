@@ -11,7 +11,14 @@ class UserSettingsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_settings_layout)
         val username = intent.getStringExtra("USERNAME")
-
+        
+        val changeEmailButton = findViewById<Button>(R.id.button3)
+        changeEmailButton.setOnClickListener() {
+            val intent = Intent(applicationContext, ChangeEmailActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
         val changePasswordButton = findViewById<Button>(R.id.button4)
         changePasswordButton.setOnClickListener() {
             val intent = Intent(applicationContext, ChangePasswordActivity::class.java)
