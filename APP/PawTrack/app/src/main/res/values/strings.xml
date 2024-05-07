@@ -100,7 +100,7 @@
     <string name="string_enter_new_email">Enter your new email</string>
     <string name="string_change_email_hint">Enter your current email, new email and password to change your email</string>
     <string name="string_enter_new_password">Enter your new password</string>
-    <string name="string_change_password_hint">To change your password enter your email, current and new password</string>
+    <string name="string_change_password_hint">To change your password enter your current and new password</string>
     <string name="btn_start_tracking">Start tracking</string>
     <string name="btn_stop_tracking">Stop tracking</string>
     <string name="string_tracking_label">Tracking</string>
