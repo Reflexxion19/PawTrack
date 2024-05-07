@@ -7,34 +7,27 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-class ChangePasswordActivity : AppCompatActivity() {
+class ChangeEmailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.change_password_layout)
-        val currentPasswordEditText = findViewById<EditText>(R.id.editText2)
-        val newPasswordEditText = findViewById<EditText>(R.id.editText3)
-        val buttonChangePassword = findViewById<Button>(R.id.signinbutton)
+        setContentView(R.layout.change_email_layout)
         val username = intent.getStringExtra("USERNAME")
+        val newEmailEditText = findViewById<EditText>(R.id.editText2)
+        val buttonChangePassword = findViewById<Button>(R.id.signinbutton)
 
         buttonChangePassword.setOnClickListener {
-            val currentPassword = currentPasswordEditText.text.toString()
-            val newPassword = newPasswordEditText.text.toString()
+            val newEmail = newEmailEditText.text.toString()
 
-            if (currentPassword.isNotEmpty() && newPassword.isNotEmpty()) {
-                val currentHashedPassword = DigestUtils.sha256Hex(currentPassword)
-                val newHashedPassword = DigestUtils.sha256Hex(newPassword)
-
+            if (newEmail.isNotEmpty()) {
                 val jsonMediaType = "application/json; charset=utf-8".toMediaType()
                 val json = """
                 {
-                    "type": "c_p",
+                    "type": "c_e",
                     "u_n": "$username",
-                    "cr_p": "$currentHashedPassword",
-                    "n_p": "$newHashedPassword"
+                    "e": "$newEmail"
                 }
                 """.trimIndent()
                 val body = json.toRequestBody(jsonMediaType)

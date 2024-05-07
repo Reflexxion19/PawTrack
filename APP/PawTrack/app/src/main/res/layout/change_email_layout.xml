@@ -64,23 +64,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editText"
-                android:layout_width="@+id/textView5"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/edit_text_background"
-                android:drawableLeft="@drawable/baseline_email_24"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/app_theme"
-                android:ems="10"
-                android:hint="@string/string_enter_email"
-                android:inputType="text"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/textView5"
-                app:layout_constraintStart_toStartOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <EditText
                 android:id="@+id/editText2"
                 android:layout_width="@+id/textView5"
                 android:layout_height="60dp"
@@ -93,26 +76,9 @@
                 android:hint="@string/string_enter_new_email"
                 android:inputType="text"
                 android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/editText"
-                app:layout_constraintStart_toStartOf="@+id/editText"
-                app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-
-            <EditText
-                android:id="@+id/editText3"
-                android:layout_width="@+id/textView5"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/edit_text_background"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/app_theme"
-                android:ems="10"
-                android:hint="@string/string_password"
-                android:inputType="text"
-                android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/editText2"
-                app:layout_constraintStart_toStartOf="@+id/editText2"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                app:layout_constraintEnd_toEndOf="@+id/textView5"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
             <Button
                 android:id="@+id/signinbutton"
@@ -122,10 +88,10 @@
                 android:backgroundTint="@color/app_theme"
                 android:clickable="true"
                 android:text="@string/string_change_email"
-                app:layout_constraintEnd_toEndOf="@+id/editText3"
+                app:layout_constraintEnd_toEndOf="@+id/editText2"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/editText3"
-                app:layout_constraintTop_toBottomOf="@+id/editText3" />
+                app:layout_constraintStart_toStartOf="@+id/editText2"
+                app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
