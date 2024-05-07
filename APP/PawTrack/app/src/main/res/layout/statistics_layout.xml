@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="90dp"
-                android:text="2/120 kcal"
+                android:text=""
                 android:textColor="@color/app_theme"
                 android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="130dp"
-                android:text="0,09 km" />
+                android:text="" />
 
             <TextView
                 android:id="@+id/textView22"

@@ -1,15 +1,10 @@
 package com.example.pawtrack
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-
-import android.widget.Button
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
@@ -23,6 +18,7 @@ class HomePageActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_layout)
         val username = intent.getStringExtra("USERNAME")
+        val pet_id = intent.getStringExtra("PET_ID")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.home
 
@@ -54,30 +50,35 @@ class HomePageActivity: AppCompatActivity() {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
                     intent.putExtra("USERNAME", username)
+                    intent.putExtra("PET_ID", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
                     intent.putExtra("USERNAME", username)
+                    intent.putExtra("PET_ID", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
                     intent.putExtra("USERNAME", username)
+                    intent.putExtra("PET_ID", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
                     intent.putExtra("USERNAME", username)
+                    intent.putExtra("PET_ID", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
                     intent.putExtra("USERNAME", username)
+                    intent.putExtra("PET_ID", pet_id)
                     startActivity(intent)
                     true
                 }
@@ -89,7 +90,6 @@ class HomePageActivity: AppCompatActivity() {
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("EEEE, dd MMM")
         dateFormat.timeZone = TimeZone.getDefault()
-
         return dateFormat.format(calendar.time)
     }
     @SuppressLint("MissingSuperCall")

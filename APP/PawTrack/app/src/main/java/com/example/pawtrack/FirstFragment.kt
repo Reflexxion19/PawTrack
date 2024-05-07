@@ -1,12 +1,12 @@
 package com.example.pawtrack
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 
 
@@ -48,7 +48,6 @@ class FirstFragment : Fragment() {
         view.findViewById<TextView>(R.id.PetNameText).text = petName
         view.findViewById<TextView>(R.id.PetActivityText).text = petActivity
         view.findViewById<TextView>(R.id.PetTracketText).text = petTrackerID
-        view.findViewById<TextView>(R.id.PetTrackerStatus).text = petTrackerStatus
 
         petPhotoUrl?.let { url ->
             Glide.with(this)

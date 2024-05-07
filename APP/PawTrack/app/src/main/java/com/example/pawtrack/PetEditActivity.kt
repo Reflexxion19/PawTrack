@@ -1,52 +1,74 @@
 package com.example.pawtrack
 
+import CircleTransform
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-class PetRegistrationActivity: AppCompatActivity() {
+class PetEditActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.create_pet_layout)
+        setContentView(R.layout.edit_pet_layout)
         val username = intent.getStringExtra("USERNAME")
-
+        val pet_name = intent.getStringExtra("PET_NAME")
+        val tracker_id = intent.getStringExtra("TRACKER_ID")
+        val pet_profile_picture = intent.getStringExtra("PET_PROFILE_PICTURE")
 
         val petNameText = findViewById<EditText>(R.id.editTextText)
+        val petTrackerID = findViewById<EditText>(R.id.editTextText2)
+        val petPictureView = findViewById<ImageView>(R.id.imageView2)
+
+        Picasso.get()
+            .load(pet_profile_picture)
+            .placeholder(R.drawable.default_pet_picture)
+            .transform(CircleTransform())
+            .into(petPictureView)
+        petNameText.setText(pet_name)
+        petTrackerID.setText(tracker_id)
+
         val petCategoryText = findViewById<Spinner>(R.id.spinner)
         var selectedItemId = 0;
-        if(petCategoryText.selectedItem.toString() == "Low Activity") {
+        if (petCategoryText.selectedItem.toString() == "Low Activity") {
             selectedItemId = 1;
-        }
-        else if (petCategoryText.selectedItem.toString() == "Medium Activity"){
+        } else if (petCategoryText.selectedItem.toString() == "Medium Activity") {
             selectedItemId = 3;
         }
-        if(petCategoryText.selectedItem.toString() == "High Activity") {
+        if (petCategoryText.selectedItem.toString() == "High Activity") {
             selectedItemId = 5;
         }
-        val petTrackerID = findViewById<EditText>(R.id.editTextText2)
         val petRegistrationButton = findViewById<Button>(R.id.RegisterButton)
-        petRegistrationButton.setOnClickListener(){
-            performPostRequest(username, petNameText.text.toString(), selectedItemId, petTrackerID.text.toString())
+        petRegistrationButton.setOnClickListener() {
+            performPostRequest(
+                username,
+                pet_name,
+                petNameText.text.toString(),
+                pet_profile_picture,
+                selectedItemId,
+                petTrackerID.text.toString()
+            )
         }
 
         val backButton = findViewById<Button>(R.id.button)
-        backButton.setOnClickListener(){
+        backButton.setOnClickListener() {
             val intent = Intent(applicationContext, PetProfileActivity::class.java)
             intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
     }
-    private fun performPostRequest(username: String?, petName: String, category: Int, trackerID: String) {
+    private fun performPostRequest(username: String?, oldPetName: String?, petName: String, pet_profile_picture: String?, category: Int, trackerID: String) {
         if (username.isNullOrEmpty()) {
             runOnUiThread {
                 Toast.makeText(applicationContext, "Username is required", Toast.LENGTH_SHORT).show()
@@ -58,13 +80,14 @@ class PetRegistrationActivity: AppCompatActivity() {
             val jsonMediaType = "application/json; charset=utf-8".toMediaType()
             var json = """
             {
-                "type": "p_r",
-                "u_n": "$username",
-                "p_n": "$petName",
-                "p_p": "",
-                "t_i": "0",
-                "t_s": "0",
-                "a_c": "$category"
+                "type":"p_u",
+                "p_n":"$oldPetName",
+                "n_p_n":"$petName",
+                "p_p":"$pet_profile_picture",
+                "t_i":0,
+                "t_s":0,
+                "a_c":$category,
+                "u_n":"$username"
             }
             """.trimIndent()
 
@@ -72,16 +95,18 @@ class PetRegistrationActivity: AppCompatActivity() {
             {
                 json = """
             {
-                "type": "p_r",
-                "u_n": "$username",
-                "p_n": "$petName",
-                "p_p": "",
-                "t_i": "$trackerID",
-                "t_s": "1",
-                "a_c": "$category"
+                "type":"p_u",
+                "p_n":"$oldPetName",
+                "n_p_n":"$petName",
+                "p_p":"$pet_profile_picture",
+                "t_i":"$trackerID",
+                "t_s":1,
+                "a_c":$category,
+                "u_n":"$username"
             }
             """.trimIndent()
             }
+            Log.d("UpdatePetInfo", "$json")
             val body = json.toRequestBody(jsonMediaType)
             val request = Request.Builder()
                 .url("https://pvp.seriouss.am")
@@ -103,7 +128,7 @@ class PetRegistrationActivity: AppCompatActivity() {
                         runOnUiThread {
                             Toast.makeText(
                                 applicationContext,
-                                "Pet registered successfully",
+                                "Pet information edited successfully",
                                 Toast.LENGTH_LONG
                             ).show()
                             val intent = Intent(applicationContext, PetProfileActivity::class.java)
@@ -115,7 +140,7 @@ class PetRegistrationActivity: AppCompatActivity() {
                         runOnUiThread {
                             Toast.makeText(
                                 applicationContext,
-                                "Error registering",
+                                "Error editing pet information",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

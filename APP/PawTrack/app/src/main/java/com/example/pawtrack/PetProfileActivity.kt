@@ -1,34 +1,23 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import okhttp3.HttpUrl
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class PetProfileActivity: AppCompatActivity() {
     private lateinit var adapter: PetFragmentPageAdapter
+    private lateinit var sharedPreferences: SharedPreferences
     interface OnDataFetched {
         fun onDataFetched(parsedList: List<Map<String, String?>>)
     }
@@ -37,7 +26,28 @@ class PetProfileActivity: AppCompatActivity() {
         setContentView(R.layout.pet_profile_layout)
         val username = intent.getStringExtra("USERNAME")
 
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+
         val petRegistrationButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        petRegistrationButton.setOnClickListener(){
+            val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
+
+        val petEditButton = findViewById<FloatingActionButton>(R.id.floatingEditButton)
+        petEditButton.setOnClickListener(){
+            val intent = Intent(applicationContext, PetEditActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            intent.putExtra("PET_NAME", sharedPreferences.getString("LastSelectedPetName", null))
+            intent.putExtra("TRACKER_ID", sharedPreferences.getString("LastSelectedTrackerId", null))
+            intent.putExtra("PET_PROFILE_PICTURE", sharedPreferences.getString("LastSelectedPetProfile", null))
+            startActivity(intent)
+            finish()
+        }
+
+
         petRegistrationButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
             intent.putExtra("USERNAME", username)
@@ -57,6 +67,7 @@ class PetProfileActivity: AppCompatActivity() {
         backButton.setOnClickListener(){
             val intent = Intent(applicationContext, HomePageActivity::class.java)
             intent.putExtra("USERNAME", username)
+            intent.putExtra("PET_ID", sharedPreferences.getString("LastSelectedPetId", null))
             startActivity(intent)
             finish()
         }
@@ -131,6 +142,8 @@ class PetProfileActivity: AppCompatActivity() {
         parsedList.forEach { pet ->
             tabLayout.addTab(tabLayout.newTab())
         }
+        val lastSelectedPetId = sharedPreferences.getString("LastSelectedPetId", null)
+        val initialPosition = parsedList.indexOfFirst { it["i"] == lastSelectedPetId }.takeIf { it >= 0 } ?: 0
         adapter.setArguments(1)
         viewPager.adapter = adapter
         tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
@@ -150,6 +163,15 @@ class PetProfileActivity: AppCompatActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 tabLayout.selectTab(tabLayout.getTabAt(position))
+
+                val selectedPetId = parsedList[position]["i"]
+                val selectedPetName = parsedList[position]["n"]
+                val selectedTrackerId = parsedList[position]["t_i"]
+                val selectedPetPhoto = parsedList[position]["p_p"]
+                sharedPreferences.edit().putString("LastSelectedPetProfile", selectedPetPhoto).apply()
+                sharedPreferences.edit().putString("LastSelectedTrackerId", selectedTrackerId).apply()
+                sharedPreferences.edit().putString("LastSelectedPetName", selectedPetName).apply()
+                sharedPreferences.edit().putString("LastSelectedPetId", selectedPetId).apply()
             }
         })
     }

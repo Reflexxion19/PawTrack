@@ -1,5 +1,6 @@
 package com.example.pawtrack
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,14 +9,9 @@ import android.view.animation.OvershootInterpolator
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import androidx.core.splashscreen.SplashScreen;
-import androidx.lifecycle.ViewModel
-import androidx.activity.viewModels
-import androidx.core.animation.doOnEnd
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import android.animation.ObjectAnimator
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun getToken(context: Context): Pair<String?, String?> {
+    fun getToken(context: Context): Triple<String?, String?, String?> {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
         val sharedPreferences = EncryptedSharedPreferences.create(
             "user_preferences",
@@ -89,7 +85,8 @@ class MainActivity : AppCompatActivity() {
         )
         val token = sharedPreferences.getString("user_token", null)
         val username = sharedPreferences.getString("USERNAME", null)
-        return Pair(token, username)
+        val pet_id = sharedPreferences.getString("PET_ID", null)
+        return Triple(token, username, pet_id)
     }
 
 }

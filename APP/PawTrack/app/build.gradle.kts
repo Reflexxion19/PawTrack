@@ -78,6 +78,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("androidx.security:security-crypto-ktx:1.1.0-alpha06")
     implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("com.squareup.picasso:picasso:2.71828")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
