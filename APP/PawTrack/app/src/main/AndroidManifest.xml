@@ -54,6 +54,9 @@
         <activity android:name=".TrackingMapActivity" />
         <activity android:name=".PetEditActivity" />
         <activity android:name=".RouteActivity" />
+        <activity android:name=".UserSettingsActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".ChangeEmailActivity" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 

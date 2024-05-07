@@ -32,6 +32,13 @@ class UserProfileActivity: AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        val userSettingsButton = findViewById<Button>(R.id.button3)
+        userSettingsButton.setOnClickListener() {
+            val intent = Intent(applicationContext, UserSettingsActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
         val logOutButton = findViewById<Button>(R.id.button5)
         logOutButton.setOnClickListener{
             clearAllPreferences(applicationContext)
@@ -40,7 +47,6 @@ class UserProfileActivity: AppCompatActivity() {
             finish()
         }
         val reminderButton = findViewById<Button>(R.id.reminder)
-
         reminderButton.setOnClickListener(){
             val intent = Intent(applicationContext, ReminderSettingActivity::class.java)
             startActivity(intent)
