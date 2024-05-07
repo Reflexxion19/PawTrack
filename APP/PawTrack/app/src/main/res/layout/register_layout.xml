@@ -124,7 +124,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_button_50"
         android:backgroundTint="@color/white"
-        android:drawableStart="@drawable/baseline_arrow_back_24"
+        android:drawableStart="@drawable/baseline_arrow_back_45"
         android:drawableTint="@color/app_theme"
         android:paddingStart="2dp"
         android:text="\n"
