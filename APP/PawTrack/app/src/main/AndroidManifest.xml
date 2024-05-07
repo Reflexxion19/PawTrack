@@ -52,6 +52,8 @@
         <activity android:name=".UserProfileActivity" />
         <activity android:name=".UserPreferencesActivity" />
         <activity android:name=".TrackingMapActivity" />
+        <activity android:name=".UserSettingsActivity" />
+        <activity android:name=".ChangePasswordActivity" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 
