@@ -1,0 +1,31 @@
+<vector
+    android:autoMirrored="true"
+    android:height="36dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24"
+    android:width="36dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Black outline -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"/>
+
+    <!-- Main arrow path -->
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/>
+
+    <!-- Highlight effect -->
+    <group>
+        <!-- Clip path for the highlight -->
+        <clip-path android:pathData="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/>
+
+        <!-- White semi-transparent overlay for the highlight -->
+        <path
+            android:fillColor="#80FFFFFF"
+            android:pathData="M0,0h24v24H0z"/>
+    </group>
+</vector>

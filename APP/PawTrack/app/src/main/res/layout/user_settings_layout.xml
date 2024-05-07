@@ -34,7 +34,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/rounded_button_50"
                 android:backgroundTint="@color/white"
-                android:drawableStart="@drawable/baseline_arrow_back_24"
+                android:drawableStart="@drawable/baseline_arrow_back_45"
                 android:drawableTint="@color/app_theme"
                 android:textSize="30sp"
                 android:paddingStart="2dp"
