@@ -107,6 +107,12 @@
     <string name="string_tracking_label">Tracking</string>
     <string name="string_recent_activities">Recent activities</string>
     <string name="btn_show_more">Show more</string>
+    <string name="string_about_description_label">Project description</string>
+    <string name="string_about_description">The goal of the project is to create a mobile app and a collar connected to it, with the help of which the owners will be able to monitor the physical activity of their dog.</string>
+    <string name="string_about_title">Product development project (PR00B251)\nKaunas University of Technology</string>
+    <string name="string_about_authors_label">Authors</string>
+    <string name="string_about_authors">Simonas Radžius\nPatricija Babenskaitė\nAugustė Eigelytė\nDovydas Katinas\nUgnius Rinkevičius\nElijus Žekonis</string>
+    <string name="string_about">About</string>
 </resources>
 
 
