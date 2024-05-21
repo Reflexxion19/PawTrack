@@ -169,12 +169,18 @@ class DB_handler{
     public function get_location_points($id){
         $sql = "SELECT `lat`, `long` FROM `gps_data` WHERE `fk_Activity_Reportid`='$id'";
         $result = mysqli_query($this->conn, $sql);
-        $row_count = mysqli_num_rows($result);
 
         while($row = mysqli_fetch_assoc($result))
         {
             echo "lat=" . $row['lat'] . ";" . "long=" . $row['long'] . "\n";
         }
+    }
+
+    public function get_pet_id_by_tracker_id($tracker_id){
+        $sql = "SELECT `id` FROM `pet` WHERE `track_id`='$tracker_id'";
+        $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['id'];
+
+        echo $result;
     }
 
     public function gps_data_processing($db, $decoded_json){
@@ -212,8 +218,8 @@ class DB_handler{
         mysqli_query($this->conn, $sql);
     }
 
-    public function respond_report_activity_id($date){
-        $sql = "SELECT `id`  FROM `activity_report` WHERE `date`='$date'";
+    public function respond_report_activity_id($date, $pet_id){
+        $sql = "SELECT `id`  FROM `activity_report` WHERE `date`='$date' AND `fk_Petid` = $pet_id";
         $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['id'];
         echo $result;
     }
@@ -287,7 +293,7 @@ if($db->conn){
                 $db->insert("pet", $data);
             }
 
-            if($decoded_json->type == "r"){ # activity report
+            if($decoded_json->type == "r"){ # create activity report
                 $dateTime = $decoded_json->dt;
                 $distance_walked = $decoded_json->d_w;
                 $calories_burned = $decoded_json->c_b;
@@ -298,7 +304,7 @@ if($db->conn){
                 '`active_time`' => $active_time, '`fk_Petid`' => $fk);
 
                 $db->insert("activity_report", $data);
-                $db->respond_report_activity_id($dateTime);
+                $db->respond_report_activity_id($dateTime, $fk);
             }
 
             if($decoded_json->type == "g_d"){ # gps data
@@ -394,6 +400,12 @@ if($db->conn){
                 $id = $parsed_data['a_r_i'];
 
                 $db->get_location_points($id);
+            }
+
+            if($parsed_data['type'] == 'g_p_i_b_t_i'){ # get pet id by tracker id
+                $tracker_id = $parsed_data['t_i'];
+
+                $db->get_pet_id_by_tracker_id($tracker_id);
             }
         }
     }
