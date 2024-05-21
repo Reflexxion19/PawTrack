@@ -77,13 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp" />
 
-            <Button
-                android:id="@+id/buttonAbout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:text="About" />
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
