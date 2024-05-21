@@ -52,6 +52,13 @@ class UserProfileActivity: AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        val aboutButton = findViewById<Button>(R.id.button6)
+        aboutButton.setOnClickListener {
+            val intent = Intent(applicationContext, AboutActivity::class.java)
+            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
     }
     fun clearAllPreferences(context: Context) {
         val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
