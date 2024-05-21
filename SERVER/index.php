@@ -122,6 +122,61 @@ class DB_handler{
         }
     }
 
+    public function get_image($id, $type){
+        $result = '';
+        if($type == 'user'){
+            $sql = "SELECT `profile_picture` FROM `user` WHERE `username`='$id'";
+            $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['profile_picture'];
+        }
+        elseif($type == 'pet'){
+            $sql = "SELECT `pet_picture` FROM `pet` WHERE `id`='$id'";
+            $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['pet_picture'];
+        }
+
+        echo $result;
+    }
+
+    public function user_image_update($user_name, $url){
+        $sql = "UPDATE `user` SET `profile_picture`='$url' WHERE `username`='$user_name'";
+        mysqli_query($this->conn, $sql);
+    }
+
+    public function pet_image_update($id, $url){
+        $sql = "UPDATE `pet` SET `pet_picture`='$url' WHERE `id`='$id'";
+        mysqli_query($this->conn, $sql);
+    }
+
+    public function get_last_activity_report_id(){
+        $sql = "SELECT `id` FROM `activity_report` WHERE `id`=(SELECT max(id) FROM `activity_report`)";
+        $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['id'];
+
+        // $data = [ 'name' => $result ];
+        // header('Content-Type: application/json; charset=utf-8');
+        // echo json_encode($data);
+        echo $result;
+    }
+
+    public function get_activity_report_ids($id, $month, $year){
+        $sql = "SELECT `id` FROM `activity_report` WHERE `fk_Petid`=$id AND MONTH(date) = $month AND YEAR(date) = $year";
+        $result = mysqli_query($this->conn, $sql);
+
+        while($row = mysqli_fetch_assoc($result))
+        {
+            echo $row['id'] . "\n";
+        }
+    }
+
+    public function get_location_points($id){
+        $sql = "SELECT `lat`, `long` FROM `gps_data` WHERE `fk_Activity_Reportid`='$id'";
+        $result = mysqli_query($this->conn, $sql);
+        $row_count = mysqli_num_rows($result);
+
+        while($row = mysqli_fetch_assoc($result))
+        {
+            echo "lat=" . $row['lat'] . ";" . "long=" . $row['long'] . "\n";
+        }
+    }
+
     public function gps_data_processing($db, $decoded_json){
         $count = $decoded_json->c;
         $fk = $decoded_json->f_a_r;
@@ -137,6 +192,26 @@ class DB_handler{
         }
     }
 
+    public function password_update($user_name, $current_pass, $new_pass){
+        $sql = "SELECT `password` FROM `user` WHERE `username`='$user_name'";
+        $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['password'];
+
+        if($result == $current_pass){
+            $sql = "UPDATE `user` SET `password`='$new_pass' WHERE `username`='$user_name'";
+
+            mysqli_query($this->conn, $sql);
+            echo "Success";
+        }
+        else{
+            echo "Incorrect";
+        }
+    }
+
+    public function email_update($user_name, $email){
+        $sql = "UPDATE `user` SET `email`='$email' WHERE `username`='$user_name'";
+        mysqli_query($this->conn, $sql);
+    }
+
     public function respond_report_activity_id($date){
         $sql = "SELECT `id`  FROM `activity_report` WHERE `date`='$date'";
         $result = mysqli_fetch_assoc(mysqli_query($this->conn, $sql))['id'];
@@ -149,19 +224,19 @@ class DB_handler{
         $values = array_values($data);
 
         $sql = "INSERT INTO $table (".implode(',',$columns).") VALUES ('" . implode("', '", $values) . "' )";
+        mysqli_query($this->conn, $sql);
+    }
 
+    public function pet_remove($name, $fk) {
+        $sql = "DELETE FROM `pet` WHERE `name`='$name' AND `fk_Userusername`='$fk'";
         mysqli_query($this->conn, $sql);
     }
 
     // Update data
-    public function update($table, $column, $value, $id) {
-        $sql = "UPDATE `$table` SET `$column`=$value WHERE `id`=$id";
-        mysqli_query($this->conn, $sql);
-    }
-
-    // Delete data
-    public function delete($table, $column, $value) {
-        $sql = "DELETE FROM `$table` WHERE `$column`='$value'";
+    public function pet_update($name, $new_name, $pet_picture, $track_id, $track_status, $activity_category, $fk) {
+        $sql = "UPDATE `pet` SET `name`='$new_name', `pet_picture`='$pet_picture', `track_id`='$track_id',
+        `track_status`='$track_status', `activity_category`='$activity_category'
+        WHERE `name`='$name' AND `fk_Userusername`='$fk'";
         mysqli_query($this->conn, $sql);
     }
 }
@@ -176,7 +251,7 @@ if($db->conn){
         $decoded_json = json_decode($post_json, false);
 
         if($decoded_json != ""){
-            if($decoded_json->type == "u_r"){ # user registration
+            if($decoded_json->type == "u_r"){ # user register
                 $username = $decoded_json->u;
                 $password = $decoded_json->p;
                 $email = $decoded_json->e;
@@ -198,7 +273,7 @@ if($db->conn){
                 $db->log_in($username, $password);
             }
 
-            if($decoded_json->type == 'p_r'){
+            if($decoded_json->type == 'p_r'){ # pet register
                 $user_name = $decoded_json->u_n;
                 $pet_name = $decoded_json->p_n;
                 $pet_picture = $decoded_json->p_p;
@@ -212,7 +287,7 @@ if($db->conn){
                 $db->insert("pet", $data);
             }
 
-            if($decoded_json->type == "r"){ # activity_report
+            if($decoded_json->type == "r"){ # activity report
                 $dateTime = $decoded_json->dt;
                 $distance_walked = $decoded_json->d_w;
                 $calories_burned = $decoded_json->c_b;
@@ -226,8 +301,44 @@ if($db->conn){
                 $db->respond_report_activity_id($dateTime);
             }
 
-            if($decoded_json->type == "g_d"){ # gps_data
+            if($decoded_json->type == "g_d"){ # gps data
                 $db->gps_data_processing($db, $decoded_json);
+            }
+
+            if($decoded_json->type == "p_rm"){ # pet remove
+                $pet_name = $decoded_json->p_n;
+                $fk = $decoded_json->u_n;
+
+                $db->pet_remove($pet_name, $fk);
+            }
+
+            if($decoded_json->type == "p_u"){ # pet update
+                $pet_name = $decoded_json->p_n;
+                $new_pet_name = $decoded_json->n_p_n;
+                $pet_picture = $decoded_json->p_p;
+                $track_id = $decoded_json->t_i;
+                $track_status = $decoded_json->t_s;
+                $activity_category = $decoded_json->a_c;
+                $fk = $decoded_json->u_n;
+
+                echo "Yes";
+
+                $db->pet_update($pet_name, $new_pet_name, $pet_picture, $track_id, $track_status, $activity_category, $fk);
+            }
+
+            if($decoded_json->type == "c_p"){ # change password
+                $user_name = $decoded_json->u_n;
+                $current_pass = $decoded_json->cr_p;
+                $new_pass = $decoded_json->n_p;
+
+                $db->password_update($user_name, $current_pass, $new_pass);
+            }
+
+            if($decoded_json->type == "c_e"){ # change email
+                $user_name = $decoded_json->u_n;
+                $email = $decoded_json->e;
+
+                $db->email_update($user_name, $email);
             }
         }
     }
@@ -253,6 +364,145 @@ if($db->conn){
                 $pet_id = $parsed_data['p'];
 
                 $db->get_statistics($pet_id);
+            }
+
+            if($parsed_data['type'] == 'g_p_i'){ # get pet image
+                $pet_id = $parsed_data['p'];
+
+                $db->get_image($pet_id, 'pet');
+            }
+
+            if($parsed_data['type'] == 'g_u_i'){ # get user image
+                $user_id = $parsed_data['u'];
+
+                $db->get_image($user_id, 'user');
+            }
+
+            if($parsed_data['type'] == 'g_l_a_r_i'){ # get last activity id
+                $db->get_last_activity_report_id();
+            }
+
+            if($parsed_data['type'] == 'g_a_r_i'){ # get activity ids
+                $id = $parsed_data['p_i'];
+                $month = $parsed_data['m'];
+                $year = $parsed_data['y'];
+
+                $db->get_activity_report_ids($id, $month, $year);
+            }
+
+            if($parsed_data['type'] == 'g_l_p'){ # get location points
+                $id = $parsed_data['a_r_i'];
+
+                $db->get_location_points($id);
+            }
+        }
+    }
+
+    if(isset($_POST["type"])){
+        if($_POST["type"] == "u_i_u"){ # user image upload
+            $user_name = $_POST["u_n"];
+
+            $target_dir = "img/";
+            $target_file = $target_dir . basename($_FILES["img"]["name"]);
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            $upload_path = $target_dir . $user_name . "." . $imageFileType;
+            
+            $check = getimagesize($_FILES["img"]["tmp_name"]);
+            if($check != false) {
+                // Check file size
+                if ($_FILES["img"]["size"] > 8000000) {
+                    echo "Sorry, your file is too large.";
+                }
+                else{
+                    // Allow certain file formats
+                    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif" ) {
+                      echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                    }
+                    else{
+                        // Try to upload file
+                        if (move_uploaded_file($_FILES["img"]["tmp_name"], $upload_path)){
+                            echo "The file ". htmlspecialchars( basename( $_FILES["img"]["name"])). " has been uploaded.";
+
+                            // Delete existing images with different file extensions
+                            if(file_exists(__DIR__ . "/img/" . $user_name . ".jpg") && $imageFileType != "jpg"){
+                                unlink(__DIR__ . "/img/" . $user_name . ".jpg");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . ".png") && $imageFileType != "png"){
+                                unlink(__DIR__ . "/img/" . $user_name . ".png");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . ".jpeg") && $imageFileType != "jpeg"){
+                                unlink(__DIR__ . "/img/" . $user_name . ".jpeg");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . ".gif") && $imageFileType != "gif"){
+                                unlink(__DIR__ . "/img/" . $user_name . ".gif");
+                            }
+
+                            // Change image link in the database
+                            $url = "https://pvp.seriouss.am/" . $upload_path;
+                            $db->user_image_update($user_name, $url);
+                        }
+                        else{
+                            echo "Sorry, there was an error uploading your file.";
+                        }
+                    }
+                }
+            } else {
+                echo "File is not an image.";
+            }
+        }
+
+        if($_POST["type"] == "p_i_u"){ # pet image upload
+            $user_name = $_POST["u_n"];
+            $id = $_POST["p_i"];
+
+            $target_dir = "img/";
+            $target_file = $target_dir . basename($_FILES["img"]["name"]);
+            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+            $upload_path = $target_dir . $user_name . "-" . $id . "." . $imageFileType;
+            
+            $check = getimagesize($_FILES["img"]["tmp_name"]);
+            if($check != false) {
+                // Check file size
+                if ($_FILES["img"]["size"] > 8000000) {
+                    echo "Sorry, your file is too large.";
+                }
+                else{
+                    // Allow certain file formats
+                    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+                    && $imageFileType != "gif" ) {
+                      echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                    }
+                    else{
+                        // Try to upload file
+                        if (move_uploaded_file($_FILES["img"]["tmp_name"], $upload_path)){
+                            echo "The file ". htmlspecialchars( basename( $_FILES["img"]["name"])). " has been uploaded.";
+
+                            // Delete existing images with different file extensions
+                            if(file_exists(__DIR__ . "/img/" . $user_name . "-" . $id . ".jpg") && $imageFileType != "jpg"){
+                                unlink(__DIR__ . "/img/" . $id . ".jpg");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . "-" . $id . ".png") && $imageFileType != "png"){
+                                unlink(__DIR__ . "/img/" . $id . ".png");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . "-" . $id . ".jpeg") && $imageFileType != "jpeg"){
+                                unlink(__DIR__ . "/img/" . $id . ".jpeg");
+                            }
+                            else if(file_exists(__DIR__ . "/img/" . $user_name . "-" . $id . ".gif") && $imageFileType != "gif"){
+                                unlink(__DIR__ . "/img/" . $id . ".gif");
+                            }
+
+                            // Change image link in the database
+                            $url = "https://pvp.seriouss.am/" . $upload_path;
+                            $db->pet_image_update($id, $url);
+                        }
+                        else{
+                            echo "Sorry, there was an error uploading your file.";
+                        }
+                    }
+                }
+            } else {
+                echo "File is not an image.";
             }
         }
     }
