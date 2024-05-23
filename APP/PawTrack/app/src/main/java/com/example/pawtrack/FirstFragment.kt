@@ -46,8 +46,23 @@ class FirstFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pet_detail, container, false)
         view.findViewById<TextView>(R.id.PetNameText).text = petName
-        view.findViewById<TextView>(R.id.PetActivityText).text = petActivity
-        view.findViewById<TextView>(R.id.PetTracketText).text = petTrackerID
+        val petActivityMap = mapOf(
+            1 to "Very active",
+            2 to "Active",
+            3 to "Normal",
+            4 to "Inactive",
+            5 to "Very inactive"
+        )
+        val petActivityWord = petActivityMap[petActivity?.toInt()] ?: "Unknown"
+        view.findViewById<TextView>(R.id.PetActivityText).text = petActivityWord
+        if (petTrackerID == "0" || petTrackerID.isNullOrEmpty()){
+            view.findViewById<TextView>(R.id.PetTracketText).visibility = View.GONE
+            view.findViewById<TextView>(R.id.trackIdLabel).visibility = View.GONE
+        }
+        else{
+            view.findViewById<TextView>(R.id.PetTracketText).text = petTrackerID
+        }
+
 
         petPhotoUrl?.let { url ->
             Glide.with(this)
