@@ -247,7 +247,7 @@
         android:id="@+id/MoreRoutesLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All routes"
+        android:text="@string/string_All_routes"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="#E4E4E4"

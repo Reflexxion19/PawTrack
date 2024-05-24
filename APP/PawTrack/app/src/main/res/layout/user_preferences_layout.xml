@@ -53,7 +53,7 @@
                 android:id="@+id/textViewLanguageLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Language"
+                android:text="@string/string_Language"
                 android:textSize="18sp" />
 
             <Spinner
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
-                android:text="Dark theme"
+                android:text="@string/string_Dark_theme"
                 android:textSize="18sp" />
 
             <Switch
@@ -84,7 +84,7 @@
         android:id="@+id/textView26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/string_Settings"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -79,13 +79,10 @@
     <string name="string_account_settings">ACCOUNT SETTINGS</string>
     <string name="string_account_preferences">PREFERENCES</string>
     <string name="string_log_out">LOG OUT</string>
-
     <string name="reminder_name_hint">Name of reminder</string>
-
     <string name="repeat_reminder_label">Repeat</string>
     <string name="add_reminder_button">Add</string>
     <string name="save_reminder_button">Save</string>
-
     <!-- spinner items -->
     <string name="spinner_prompt">Choose your pets activity level</string>
     <string-array name="spinner_items">
@@ -113,6 +110,13 @@
     <string name="string_about_authors_label">Authors</string>
     <string name="string_about_authors">Simonas Radžius\nPatricija Babenskaitė\nAugustė Eigelytė\nDovydas Katinas\nUgnius Rinkevičius\nElijus Žekonis</string>
     <string name="string_about">About</string>
+    <string name="string_Message">Message</string>
+    <string name="string_Time">Time</string>
+    <string name="string_Repeat">Repeat</string>
+    <string name="string_All_routes">All routes</string>
+    <string name="string_Language">Language</string>
+    <string name="string_Dark_theme">Dark theme</string>
+    <string name="string_Settings">Settings</string>
 </resources>
 
 

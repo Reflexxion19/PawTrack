@@ -11,7 +11,7 @@
         android:id="@+id/textViewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Message"
+        android:text="@string/string_Message"
         android:textSize="18sp"
         android:textColor="@android:color/white"
         android:layout_marginStart="20dp"/>
@@ -20,7 +20,7 @@
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time"
+        android:text="@string/string_Time"
         android:textSize="14sp"
         android:textColor="@android:color/white"
         android:layout_marginStart="50dp"/>
@@ -29,7 +29,7 @@
         android:id="@+id/checkBoxRepeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Repeat"
+        android:text="@string/string_Repeat"
         android:textSize="14sp"
         android:textColor="@android:color/white"
         android:layout_marginStart="50dp"/>
