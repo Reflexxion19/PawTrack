@@ -117,6 +117,7 @@
     <string name="string_Language">Language</string>
     <string name="string_Dark_theme">Dark theme</string>
     <string name="string_Settings">Settings</string>
+    <string name="string_About"> About </string>
 </resources>
 
 

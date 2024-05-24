@@ -75,7 +75,17 @@
                 android:id="@+id/switch1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="4dp"
+                android:text="Dark Mode" />
+            <Button
+                android:id="@+id/buttonAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_About"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
