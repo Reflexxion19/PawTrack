@@ -118,4 +118,5 @@
     <string name="string_Dark_theme">Tamsus režimas</string>
     <string name="string_Settings">Nustatymai</string>
     <string name="string_About">Apie</string>
+    <string name="switch_tracking_label">Sekimo tipas (rankinis/automatinis)</string>
 </resources>

@@ -118,6 +118,7 @@
     <string name="string_Dark_theme">Dark theme</string>
     <string name="string_Settings">Settings</string>
     <string name="string_About"> About </string>
+    <string name="switch_tracking_label">Tracking type (manual/automatic)</string>
 </resources>
 
 
