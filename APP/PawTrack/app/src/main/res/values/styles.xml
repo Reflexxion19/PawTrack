@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.PawTrack2" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme.PawTrack2" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/app_theme_light</item>
         <item name="colorPrimaryDark">@color/app_theme</item>
         <item name="colorAccent">@color/app_theme</item>
     </style>
     <style name="Theme.PawTrack2.Starting" parent="Theme.SplashScreen">
         <item name="android:windowSplashScreenBackground">@color/white</item>
-        <item name="postSplashScreenTheme">@style/Theme.PawTrack2</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
     </style>
 </resources>

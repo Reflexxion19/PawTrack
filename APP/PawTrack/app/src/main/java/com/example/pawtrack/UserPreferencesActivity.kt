@@ -120,7 +120,7 @@ class UserPreferencesActivity : AppCompatActivity() {
         val languageSpinner = findViewById<Spinner>(R.id.spinnerLanguage)
         val languageArray = resources.getStringArray(R.array.languages)
         val selectedPosition = when (currentLanguage) {
-            "es" -> languageArray.indexOf("Spanish")
+            "lt" -> languageArray.indexOf("lietuvių")
             else -> languageArray.indexOf("English")
         }
 

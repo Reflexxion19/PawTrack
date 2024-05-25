@@ -16,6 +16,8 @@ import androidx.security.crypto.MasterKeys
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
+    private val PREFERENCES_FILE = "com.example.pawtrack.preferences"
+    private val PREFERENCE_THEME_KEY = "theme"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
@@ -47,6 +49,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         super.onCreate(savedInstanceState)
+        loadUserPreferences()
+
 
         val (token, username) = getToken(applicationContext)
         if (token.isNullOrEmpty() || username.isNullOrEmpty()) {
@@ -62,6 +66,17 @@ class MainActivity : AppCompatActivity() {
         }
         // Initialize osmdroid configuration
         //Configuration.getInstance().load(this, getPreferences(MODE_PRIVATE))
+    }
+    private fun loadUserPreferences() {
+        val sharedPreferences = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+        val isNightMode = sharedPreferences.getBoolean(PREFERENCE_THEME_KEY, false)
+
+        // Set the appropriate theme based on the retrieved preference
+        if (isNightMode) {
+            setTheme(R.style.Theme_PawTrack2_Dark) // Use the dark theme
+        } else {
+            setTheme(R.style.Theme_PawTrack2) // Use the light theme
+        }
     }
     fun openMap(view: View) {
         val intent = Intent(this, MapActivity::class.java)
@@ -89,146 +104,4 @@ class MainActivity : AppCompatActivity() {
         return Triple(token, username, pet_id)
     }
 
-}
-//Opens the map
-
-
-//Empty function frames:
-
-//Login function
-//Returns success factor
-fun LoginUser():Boolean{
-    return true
-}
-
-//Logout function
-//Returns success factor
-fun LogoutUser():Boolean{
-    return true
-}
-
-//Register function
-//Returns success factor
-fun RegisterUser():Boolean{
-    return true
-}
-
-//Password recovery function
-//Returns success factor
-fun ForgotPassword():Boolean{
-    return true
-}
-
-//Extends premium account status
-//Returns success factor
-fun ExtendPremiumAccount():Boolean{
-    return true
-}
-
-//User account deletion function
-//Returns success factor
-fun DeleteUser():Boolean{
-    return true
-}
-
-//Profile edit function
-//Returns success factor
-fun EditProfile():Boolean{
-    return true
-}
-
-//Profile view function
-//Returns success factor
-fun ViewProfile(){
-    //to implement
-}
-
-//Pet Register function
-//Returns success factor
-fun RegisterPet():Boolean{
-    return true
-}
-
-//Pet delete function
-//Returns success factor
-fun DeletePet():Boolean{
-    return true
-}
-
-//Pet edit function
-//Returns success factor
-fun EditPet():Boolean{
-    return true
-}
-
-//Pet view function
-fun ViewPet(){
-    //to implement
-}
-
-//Pet diet view function
-fun ViewDietPet(){
-    //to implement
-}
-
-//Create Pet diet  function
-//Returns success factor
-fun CreateDietPet():Boolean{
-    return true
-}
-
-//Edit Pet diet  function
-//Returns success factor
-fun EditDietPet():Boolean{
-    return true
-}
-
-//Delete Pet diet  function
-//Returns success factor
-fun DeleteDietPet():Boolean{
-    return true
-}
-
-//Start activity function
-//Returns success factor
-fun StartActivity():Boolean{
-    return true
-}
-
-//Submit activity function
-//Returns success factor
-fun SubmitActivity():Boolean{
-    return true
-}
-
-//View Activity report function
-fun ViewActivityReport(){
-    //to implement
-}
-
-//Get activity data function
-//Returns success factor
-fun GetActivityData():Boolean{
-    return true
-}
-
-//Processes data from the controller on the pet
-fun ProcessControllerData(){
-    //to implement
-}
-
-//Lists all users
-fun ListAllUsers(){
-    //to implement
-}
-
-//Views specific user account
-fun ViewUserAccount(){
-    //to implement
-}
-
-//Deletes specific user account
-//Returns success factor
-fun DeleteUserAccount():Boolean{
-    return true
 }
