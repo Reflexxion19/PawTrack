@@ -156,6 +156,16 @@ class DB_handler{
         echo $result;
     }
 
+    public function get_activity_reports($pet_id) {
+        $sql = "SELECT `date`, `distance_walked`, `calories_burned`, `active_time` FROM `activity_report` WHERE `fk_Petid`='$pet_id'";
+        $result = mysqli_query($this->conn, $sql);
+    
+        while($row = mysqli_fetch_assoc($result)) {
+            echo "d=" . $row['date'] . ";" . "d_w=" . $row['distance_walked'] . ";" . 
+            "c_b=" . $row['calories_burned'] . ";" . "a_t=" . $row['active_time'] . "\n";
+        }
+    }
+
     public function get_activity_report_ids($id, $month, $year){
         $sql = "SELECT `id` FROM `activity_report` WHERE `fk_Petid`=$id AND MONTH(date) = $month AND YEAR(date) = $year";
         $result = mysqli_query($this->conn, $sql);
@@ -394,6 +404,12 @@ if($db->conn){
                 $year = $parsed_data['y'];
 
                 $db->get_activity_report_ids($id, $month, $year);
+            }
+
+            if($parsed_data['type'] == 'g_a_r'){ # get activity reports
+                $pet_id = $parsed_data['p'];
+
+                $db->get_activity_reports($pet_id);
             }
 
             if($parsed_data['type'] == 'g_l_p'){ # get location points
