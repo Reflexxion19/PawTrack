@@ -1,85 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <!-- RecyclerView to display current reminders -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewReminders"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/fabAddReminder" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="16dp" />
 
     <!-- Floating Action Button for adding new reminders -->
 
-    <!-- Bottom Sheet for adding a new reminder -->
+    <!-- Bottom Sheet -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddReminder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="33dp"
-        android:layout_marginBottom="105dp"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="44dp"
         android:contentDescription="@string/add_reminder_button"
-        android:src="@drawable/baseline_add_24" />
+        android:src="@drawable/baseline_add_24"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:layout_alignParentTop="true"
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <EditText
             android:id="@+id/etReminderName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/reminder_name_hint"/>
+            android:hint="@string/reminder_name_hint" />
 
         <!-- Repeat Checkbox -->
         <CheckBox
             android:id="@+id/cbRepeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/repeat_reminder_label"/>
+            android:text="@string/repeat_reminder_label" />
 
         <!-- Save Button -->
         <Button
             android:id="@+id/btnSaveReminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save_reminder_button"/>
-
+            android:text="@string/save_reminder_button" />
     </LinearLayout>
 
+    <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginBottom="-1dp"
         android:background="#FFFFFF"
         android:clickable="true"
         app:itemIconTint="@color/black"
         app:itemTextColor="#000000"
+        app:menu="@menu/button_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/button_nav_menu" />
-
-
-</RelativeLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

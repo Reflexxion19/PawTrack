@@ -1,10 +1,9 @@
 package com.example.pawtrack
 
-
-import java.time.LocalDateTime
-import java.time.LocalTime
 data class AlarmItem(
-    val time: LocalTime,
+    val id: Int,
+    val time: String,
     val message: String,
     val repeat: Boolean
 )
+

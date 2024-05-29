@@ -4,8 +4,8 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -22,7 +22,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
-import java.time.LocalTime
 
 class ReminderSettingActivity : AppCompatActivity() {
 
@@ -35,7 +34,6 @@ class ReminderSettingActivity : AppCompatActivity() {
     private lateinit var etReminderName: EditText
     private lateinit var cbRepeat: CheckBox
     private lateinit var timePicker: TimePicker
-    private var selectedTime: LocalTime = LocalTime.now() // Initialize with current time
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,13 +42,11 @@ class ReminderSettingActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-
-
-
         scheduler = AndroidAlarmScheduler(this)
-        adapter = ReminderAdapter(emptyList())
+        adapter = ReminderAdapter(emptyList()) { alarm ->
+            deleteAlarm(alarm)
+        }
 
-        // Find views
         recyclerView = findViewById(R.id.recyclerViewReminders)
         fabAddReminder = findViewById(R.id.fabAddReminder)
         bottomSheet = findViewById(R.id.bottomSheet)
@@ -59,7 +55,6 @@ class ReminderSettingActivity : AppCompatActivity() {
         cbRepeat = findViewById(R.id.cbRepeat)
         timePicker = findViewById(R.id.timePicker)
 
-        // Set up RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -94,101 +89,122 @@ class ReminderSettingActivity : AppCompatActivity() {
             }
         }
 
-        // Set up FAB click listener
         fabAddReminder.setOnClickListener {
             if (bottomSheet.visibility == View.VISIBLE) {
                 bottomSheet.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE // Show the RecyclerView
+                recyclerView.visibility = View.VISIBLE
             } else {
                 bottomSheet.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE // Hide the RecyclerView
+                recyclerView.visibility = View.GONE
             }
         }
 
-        // Set up Save Button click listener
         btnSaveReminder.setOnClickListener {
             val message = etReminderName.text.toString()
             val repeat = cbRepeat.isChecked
 
-            // Schedule alarm with selected time
-            val alarmItem = AlarmItem(
-                time = selectedTime,
+            val hour = timePicker.hour
+            val minute = timePicker.minute
+            val time = String.format("%02d:%02d", hour, minute)
+
+            val newAlarm = AlarmItem(
+                id = System.currentTimeMillis().toInt(),
                 message = message,
+                time = time,
                 repeat = repeat
             )
-            scheduler.schedule(alarmItem)
-            // Save the alarm
-            saveAlarm(alarmItem)
 
-            // Clear input fields
-            etReminderName.setText("")
-            cbRepeat.isChecked = false
+            scheduler.schedule(newAlarm)
+            saveAlarm(newAlarm)
+            updateAlarms()
+            clearInputs()
 
-            // Fetch and show list of already set alarms
-            showAlreadySetAlarms()
+            bottomSheet.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
         }
 
-        // Set up TimePicker listener
-        timePicker.setOnTimeChangedListener { _, hourOfDay, minute ->
-            selectedTime = LocalTime.of(hourOfDay, minute)
+        // Request notification permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
         }
+
+        loadAlarms()
     }
 
-    override fun onResume() {
-        super.onResume()
-        requestNotificationPermission()
-    }
-
-    private fun requestNotificationPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Request notification permission
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                NOTIFICATION_PERMISSION_REQUEST_CODE
-            )
-        }
-    }
-
-    private fun saveAlarm(alarmItem: AlarmItem) {
-        val alarms = fetchAlreadySetAlarms().toMutableList()
-        val toSave = SavedAlarm(
-                alarmItem.time.toString(),
-                 alarmItem.message,
-                alarmItem.repeat
-
-        )
-        alarms.add(toSave)
-
-        for(alarm in alarms)
-        {
-            Log.d("Alarm time:", alarm.time.toString())
-        }
-
+    private fun loadAlarms() {
         val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
         val gson = Gson()
-        val json = gson.toJson(alarms)
-        sharedPreferences.edit().putString("alarms", json).apply()
+        val json = sharedPreferences.getString("alarms_list", null)
+        val type: Type = object : TypeToken<List<AlarmItem>>() {}.type
+        val alarms: List<AlarmItem> = gson.fromJson(json, type) ?: emptyList()
         adapter.updateData(alarms)
     }
 
-    private fun fetchAlreadySetAlarms(): List<SavedAlarm> {
+    private fun saveAlarm(alarm: AlarmItem) {
         val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
         val gson = Gson()
-        val json = sharedPreferences.getString("alarms", null)
-        val type: Type = object : TypeToken<List<SavedAlarm>>() {}.type
-        return gson.fromJson(json, type) ?: emptyList()
+        val json = sharedPreferences.getString("alarms_list", null)
+        val type: Type = object : TypeToken<List<AlarmItem>>() {}.type
+        val alarms: MutableList<AlarmItem> = gson.fromJson(json, type) ?: mutableListOf()
+        alarms.add(alarm)
+        val editor = sharedPreferences.edit()
+        editor.putString("alarms_list", gson.toJson(alarms))
+        editor.apply()
     }
 
-    private fun showAlreadySetAlarms() {
-        // Fetch the list of already set alarms
-        val alarms = fetchAlreadySetAlarms()
+    private fun deleteAlarm(alarm: AlarmItem) {
+        val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences.getString("alarms_list", null)
+        val type: Type = object : TypeToken<List<AlarmItem>>() {}.type
+        val alarms: MutableList<AlarmItem> = gson.fromJson(json, type) ?: mutableListOf()
+        alarms.remove(alarm)
+        val editor = sharedPreferences.edit()
+        editor.putString("alarms_list", gson.toJson(alarms))
+        editor.apply()
 
-        // Update the adapter with the list of alarms
+        scheduler.cancel(alarm.id)
+        updateAlarms()
+    }
+
+    private fun updateAlarms() {
+        val sharedPreferences = getSharedPreferences("alarms", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json = sharedPreferences.getString("alarms_list", null)
+        val type: Type = object : TypeToken<List<AlarmItem>>() {}.type
+        val alarms: List<AlarmItem> = gson.fromJson(json, type) ?: emptyList()
         adapter.updateData(alarms)
+    }
+
+    private fun clearInputs() {
+        etReminderName.text.clear()
+        cbRepeat.isChecked = false
+        timePicker.hour = 0
+        timePicker.minute = 0
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                // Permission granted
+            } else {
+                // Permission denied
+            }
+        }
     }
 }

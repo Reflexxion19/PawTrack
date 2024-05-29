@@ -1,37 +1,33 @@
-<!-- item_reminder.xml -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_corner_background"
-    android:padding="12dp"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/textViewMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/string_Message"
-        android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginStart="20dp"/>
+        android:text="Reminder message"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/textViewTime"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/string_Time"
+        android:text="Reminder time"
         android:textSize="14sp"
-        android:textColor="@android:color/white"
-        android:layout_marginStart="50dp"/>
+        android:textColor="@android:color/darker_gray" />
 
     <CheckBox
         android:id="@+id/checkBoxRepeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/string_Repeat"
-        android:textSize="14sp"
-        android:textColor="@android:color/white"
-        android:layout_marginStart="50dp"/>
+        android:text="Repeat" />
 
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
 </LinearLayout>
