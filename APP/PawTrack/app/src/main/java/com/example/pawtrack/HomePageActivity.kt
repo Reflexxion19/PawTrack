@@ -16,6 +16,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import com.example.pawtrack.Map.MapActivity
+import com.example.pawtrack.Pet.PetProfileActivity
+import com.example.pawtrack.Tracking.StatisticsActivity
+import com.example.pawtrack.Tracking.TrackingActivity
+import com.example.pawtrack.User.SubscriptionActivity
+import com.example.pawtrack.User.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikhaellopez.circularprogressbar.CircularProgressBar

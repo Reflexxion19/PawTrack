@@ -12,8 +12,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import com.example.pawtrack.Alarms.ReminderSettingActivity
+import com.example.pawtrack.AppInterface.MainViewModel
+import com.example.pawtrack.Map.MapActivity
+import com.example.pawtrack.User.LoginActivity
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {

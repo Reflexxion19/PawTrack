@@ -37,28 +37,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.pawtrack.MapActivity" />
-        <activity android:name=".ReminderSettingActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
+        <activity android:name="com.example.pawtrack.Map.MapActivity" />
+        <activity android:name=".Alarms.ReminderSettingActivity" />
+        <activity android:name=".User.LoginActivity" />
+        <activity android:name=".User.SignUpActivity" />
         <activity android:name=".HomePageActivity" />
-        <activity android:name=".RemindPasswordActivity" />
-        <activity android:name=".StatisticsActivity" />
-        <activity android:name=".SubscriptionActivity" />
-        <activity android:name=".TrackingActivity" />
-        <activity android:name=".PetProfileActivity" />
-        <activity android:name=".PetRegistrationActivity" />
-        <activity android:name=".UserProfileActivity" />
-        <activity android:name=".UserPreferencesActivity" />
-        <activity android:name=".TrackingMapActivity" />
-        <activity android:name=".PetEditActivity" />
-        <activity android:name=".RouteActivity" />
-        <activity android:name=".UserSettingsActivity" />
-        <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".ChangeEmailActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".YearlyReviewActivity" />
-        <receiver android:name=".AlarmReceiver" />
+        <activity android:name=".User.RemindPasswordActivity" />
+        <activity android:name=".Tracking.StatisticsActivity" />
+        <activity android:name=".User.SubscriptionActivity" />
+        <activity android:name=".Tracking.TrackingActivity" />
+        <activity android:name=".Pet.PetProfileActivity" />
+        <activity android:name=".Pet.PetRegistrationActivity" />
+        <activity android:name=".User.UserProfileActivity" />
+        <activity android:name=".User.UserPreferencesActivity" />
+        <activity android:name=".Tracking.TrackingMapActivity" />
+        <activity android:name=".Pet.PetEditActivity" />
+        <activity android:name=".Tracking.RouteActivity" />
+        <activity android:name=".User.UserSettingsActivity" />
+        <activity android:name=".User.ChangePasswordActivity" />
+        <activity android:name=".User.ChangeEmailActivity" />
+        <activity android:name=".AppInterface.AboutActivity" />
+        <activity android:name=".Tracking.YearlyReviewActivity" />
+        <receiver android:name=".Alarms.AlarmReceiver" />
 
     </application>
 

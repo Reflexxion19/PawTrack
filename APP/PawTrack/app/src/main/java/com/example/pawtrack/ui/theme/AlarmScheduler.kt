@@ -1,6 +1,6 @@
 package com.example.pawtrack
 
-import org.jetbrains.annotations.Async.Schedule
+import com.example.pawtrack.Alarms.AlarmItem
 
 interface AlarmScheduler {
     fun Schedule(item: AlarmItem)
