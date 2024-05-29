@@ -1,5 +1,7 @@
 package com.example.pawtrack.Pet
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +31,6 @@ class FirstFragment : Fragment() {
     private var petTrackerID: String? = null
     private var petTrackerStatus: String? = null
     private var petPhotoUrl: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,6 +48,7 @@ class FirstFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pet_detail, container, false)
         view.findViewById<TextView>(R.id.PetNameText).text = petName
+
         val petActivityMap = mapOf(
             1 to "Very active",
             2 to "Active",
@@ -54,14 +56,25 @@ class FirstFragment : Fragment() {
             4 to "Inactive",
             5 to "Very inactive"
         )
+
         val petActivityWord = petActivityMap[petActivity?.toInt()] ?: "Unknown"
+
+
+        val sharedPreferences: SharedPreferences =
+            requireContext().getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+
         view.findViewById<TextView>(R.id.PetActivityText).text = petActivityWord
         if (petTrackerID == "0" || petTrackerID.isNullOrEmpty()){
             view.findViewById<TextView>(R.id.PetTracketText).visibility = View.GONE
             view.findViewById<TextView>(R.id.trackIdLabel).visibility = View.GONE
+            sharedPreferences.edit().apply {
+                putString("LastSelectedPetCategory", petActivity)
+                apply()
+            }
         }
         else{
             view.findViewById<TextView>(R.id.PetTracketText).text = petTrackerID
+
         }
 
 

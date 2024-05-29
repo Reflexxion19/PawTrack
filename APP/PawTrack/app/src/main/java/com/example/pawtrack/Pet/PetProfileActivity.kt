@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,8 +15,10 @@ import com.example.pawtrack.User.UserProfileActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import okhttp3.HttpUrl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class PetProfileActivity: AppCompatActivity() {
@@ -29,7 +32,7 @@ class PetProfileActivity: AppCompatActivity() {
         setContentView(R.layout.pet_profile_layout)
         sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("USERNAME", null)
-
+        val lastSelectedPetId = sharedPreferences.getString("LastSelectedPetName", null)
         val petRegistrationButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         petRegistrationButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
@@ -65,11 +68,60 @@ class PetProfileActivity: AppCompatActivity() {
             finish()
         }
 
+        val removeButton = findViewById<FloatingActionButton>(R.id.removePet)
+        removeButton.setOnClickListener()
+        {
+
+            performRemovePostRequest(username, lastSelectedPetId)
+
+        }
+
         performGetRequest(username, object : OnDataFetched {
             override fun onDataFetched(parsedList: List<Map<String, String?>>) {
             }
         })
     }
+
+    private fun performRemovePostRequest(username: String?, pet_id: String?) {
+        Log.d("POST",username + " " + pet_id)
+        if(!username.isNullOrEmpty() && !pet_id.isNullOrEmpty())
+        {
+            val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+            val json = """
+                {
+                    "type": "p_rm",
+                    "p_n": "$pet_id",
+                    "u_n": "$username"
+                }
+                """.trimIndent()
+            val body = json.toRequestBody(jsonMediaType)
+            val request = Request.Builder()
+                .url("https://pvp.seriouss.am")
+                .post(body)
+                .build()
+
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    runOnUiThread {
+                        val intent = Intent(applicationContext, PetProfileActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+            })
+        }
+        else
+        {
+            Toast.makeText(applicationContext,"All fields are required", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
     private fun performGetRequest(username: String?, onDataFetched: OnDataFetched) {
         if (username.isNullOrEmpty()) {
             runOnUiThread {

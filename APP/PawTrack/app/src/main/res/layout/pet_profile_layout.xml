@@ -106,6 +106,17 @@
                 app:srcCompat="@drawable/baseline_edit_24" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/removePet"
+                android:layout_width="59dp"
+                android:layout_height="54dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="112dp"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/sharp_remove_black_36" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

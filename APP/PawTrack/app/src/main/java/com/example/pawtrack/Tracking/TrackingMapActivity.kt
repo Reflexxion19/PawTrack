@@ -244,7 +244,7 @@ class TrackingMapActivity : AppCompatActivity() {
         json.put("type", "r");
         json.put("dt", "$d_t");
         json.put("d_w", "0");
-        json.put("c_b", "50");
+        json.put("c_b", "50"); // CALC DIST AND MULTIPLY BY AVG DOG WEIGHT :-)
         json.put("a_t", "$a_t");
         json.put("p", pet_id);
 
