@@ -157,11 +157,11 @@ class DB_handler{
     }
 
     public function get_activity_reports($pet_id) {
-        $sql = "SELECT `date`, `distance_walked`, `calories_burned`, `active_time` FROM `activity_report` WHERE `fk_Petid`='$pet_id'";
+        $sql = "SELECT `id`, `date`, `distance_walked`, `calories_burned`, `active_time` FROM `activity_report` WHERE `fk_Petid`='$pet_id'";
         $result = mysqli_query($this->conn, $sql);
     
         while($row = mysqli_fetch_assoc($result)) {
-            echo "d=" . $row['date'] . ";" . "d_w=" . $row['distance_walked'] . ";" . 
+            echo "id=" . $row['id'] . ";" . "d=" . $row['date'] . ";" . "d_w=" . $row['distance_walked'] . ";" . 
             "c_b=" . $row['calories_burned'] . ";" . "a_t=" . $row['active_time'] . "\n";
         }
     }

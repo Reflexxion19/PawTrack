@@ -3,7 +3,9 @@ package com.example.pawtrack
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.viewModels
@@ -12,12 +14,14 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
     private val PREFERENCES_FILE = "com.example.pawtrack.preferences"
     private val PREFERENCE_THEME_KEY = "theme"
+    private val PREFERENCE_LANGUAGE_KEY = "language"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         loadUserPreferences()
 
+        setLanguage()
 
         val (token, username) = getToken(applicationContext)
         if (token.isNullOrEmpty() || username.isNullOrEmpty()) {
@@ -104,4 +109,18 @@ class MainActivity : AppCompatActivity() {
         return Triple(token, username, pet_id)
     }
 
+    fun setLanguage(){
+        val sharedPreferences = getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+        val newLocale = sharedPreferences.getString(PREFERENCE_LANGUAGE_KEY, Locale.getDefault().language);
+
+        val locale = Locale(newLocale)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
+
+        sharedPreferences.edit().putString(PREFERENCE_LANGUAGE_KEY, newLocale).apply()
+        Log.d("UserPreferencesActivity", "Locale changed to: $newLocale")
+        recreate()
+    }
 }
