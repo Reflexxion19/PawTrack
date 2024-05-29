@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Shaboing\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\Pc\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -67,7 +67,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="imagePath" value="C:\Users\Shaboing\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\Pc\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -79,8 +79,9 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Shaboing\Downloads\428179842_243149492182503_7374568681084751189_n (1).jpg" />
-                                                <entry key="scalingPercent" value="71" />
+                                                <entry key="imagePath" value="D:\Github_Repos\PawTrack\IMAGES\Paw.png" />
+                                                <entry key="scalingPercent" value="81" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -112,7 +113,7 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="previewDensity" value="HIGH" />
+                                      <entry key="outputName" value="paw" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -129,7 +130,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Shaboing\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\Pc\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -173,7 +174,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="C:\Users\Shaboing\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\Pc\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -237,7 +238,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="imagePath" value="C:\Users\Shaboing\AppData\Local\Temp\ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\Pc\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -276,11 +277,6 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
-                                    </map>
-                                  </option>
-                                  <option name="values">
-                                    <map>
-                                      <entry key="previewDensity" value="HIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
