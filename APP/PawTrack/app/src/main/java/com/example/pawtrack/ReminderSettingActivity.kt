@@ -1,6 +1,8 @@
 package com.example.pawtrack
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -15,14 +17,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import java.time.LocalTime
-import android.Manifest
-import android.content.Intent
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ReminderSettingActivity : AppCompatActivity() {
 
@@ -43,7 +43,6 @@ class ReminderSettingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reminder_setting)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val username = intent.getStringExtra("USERNAME")
 
 
 
@@ -68,31 +67,26 @@ class ReminderSettingActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }

@@ -63,9 +63,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(loginIntent)
             finish()
         } else {
-            val homeIntent = Intent(this, HomePageActivity::class.java).apply {
-                putExtra("USERNAME", username)
-            }
+            val homeIntent = Intent(this, HomePageActivity::class.java)
             startActivity(homeIntent)
             finish()
         }
@@ -95,14 +93,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getToken(context: Context): Triple<String?, String?, String?> {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            "user_preferences",
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
+        val sharedPreferences = context.getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
         val token = sharedPreferences.getString("user_token", null)
         val username = sharedPreferences.getString("USERNAME", null)
         val pet_id = sharedPreferences.getString("PET_ID", null)

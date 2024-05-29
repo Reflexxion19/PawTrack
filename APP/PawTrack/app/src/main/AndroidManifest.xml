@@ -57,6 +57,7 @@
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".ChangeEmailActivity" />
         <activity android:name=".AboutActivity" />
+        <activity android:name=".YearlyReviewActivity" />
         <receiver android:name=".AlarmReceiver" />
     </application>
 

@@ -14,8 +14,6 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.IOException
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 
 class LoginActivity: AppCompatActivity() {
 
@@ -26,6 +24,7 @@ class LoginActivity: AppCompatActivity() {
         val usernameEditText = findViewById<EditText>(R.id.editTextText)
         val passwordEditText = findViewById<EditText>(R.id.editTextTextPassword)
         val buttonSignIn = findViewById<Button>(R.id.signinbutton)
+
 
 
         val forgotPasswordTextView = findViewById<TextView>(R.id.textView2)
@@ -68,13 +67,12 @@ class LoginActivity: AppCompatActivity() {
                     }
 
                     override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                        val token = "abcd123"
+                        saveToken(this@LoginActivity, token, username)
                         runOnUiThread {
                             val responseBodyString = response.body?.string() ?: ""
                             if (responseBodyString == "Login successful") {
-                                val token = "abcd123"
-                                saveToken(this@LoginActivity, token, username)
                                 val intent = Intent(applicationContext, HomePageActivity::class.java)
-                                intent.putExtra("USERNAME", username)
                                 startActivity(intent)
                                 finish()
                             }
@@ -93,18 +91,11 @@ class LoginActivity: AppCompatActivity() {
     }
     fun saveToken (context: Context, token: String, username: String)
     {
-        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            "user_preferences",
-            masterKey,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-        with(sharedPreferences.edit()){
+        val sharedPreferences = context.getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
             putString("user_token", token)
             putString("USERNAME", username)
-            apply()
+            commit()
         }
     }
 }

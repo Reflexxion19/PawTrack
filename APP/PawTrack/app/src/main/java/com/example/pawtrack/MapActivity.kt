@@ -32,7 +32,6 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
 
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
-
     private lateinit var mapView: MapView
     private lateinit var overpassQueryTask: OverpassQueryTask
     private var currentLocation = GeoPoint(0, 0)
@@ -57,9 +56,6 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
 
         setContentView(R.layout.activity_map)
 
-
-        val username = intent.getStringExtra("USERNAME")
-        val pet_id = intent.getStringExtra("PET_ID")
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.map
 
@@ -82,36 +78,26 @@ class MapActivity : AppCompatActivity(), OverpassQueryTask.OverpassQueryListener
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }

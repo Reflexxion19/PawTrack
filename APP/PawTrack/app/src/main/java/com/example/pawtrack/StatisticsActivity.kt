@@ -1,6 +1,8 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,26 +19,26 @@ import java.io.IOException
 import java.util.Calendar
 
 class StatisticsActivity: AppCompatActivity() {
-
+    private lateinit var sharedPreferences: SharedPreferences
     interface OnDataFetched {
         fun onDataFetched(parsedList: List<Map<String, String?>>)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.statistics_layout)
-        val username = intent.getStringExtra("USERNAME")
-        val pet_id = intent.getStringExtra("PET_ID")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val pet_id = sharedPreferences.getString("LastSelectedPetId", null)
+        val username = sharedPreferences.getString("USERNAME", null)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.statistics
 
         performGetRequest(object : StatisticsActivity.OnDataFetched {
             override fun onDataFetched(parsedList: List<Map<String, String?>>) {
             }
-        })
+        }, pet_id)
         val petprofileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
         petprofileButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -44,7 +46,13 @@ class StatisticsActivity: AppCompatActivity() {
         val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         profileButton.setOnClickListener(){
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
+            startActivity(intent)
+            finish()
+        }
+
+        val yearlyReviewButton = findViewById<FloatingActionButton>(R.id.floatingActionButton3)
+        yearlyReviewButton.setOnClickListener(){
+            val intent = Intent(applicationContext, YearlyReviewActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -53,36 +61,26 @@ class StatisticsActivity: AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
-                    intent.putExtra("USERNAME", username)
-                    intent.putExtra("USERNAME", pet_id)
                     startActivity(intent)
                     true
                 }
@@ -90,12 +88,12 @@ class StatisticsActivity: AppCompatActivity() {
             }
         }
     }
-    private fun performGetRequest(onDataFetched: OnDataFetched) {
+    private fun performGetRequest(onDataFetched: OnDataFetched, pet_id: String?) {
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("pvp.seriouss.am")
             .addQueryParameter("type", "g_s") //get statistics
-            .addQueryParameter("p", "1")
+            .addQueryParameter("p", pet_id)
             .build()
 
         val request = Request.Builder()

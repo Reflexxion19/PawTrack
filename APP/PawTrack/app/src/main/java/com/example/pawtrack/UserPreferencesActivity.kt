@@ -25,7 +25,6 @@ class UserPreferencesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_preferences_layout)
 
-        val username = intent.getStringExtra("USERNAME")
         val backButton = findViewById<Button>(R.id.button2)
         val aboutButton = findViewById<Button>(R.id.buttonAbout)
         val languageSpinner = findViewById<Spinner>(R.id.spinnerLanguage)
@@ -34,7 +33,6 @@ class UserPreferencesActivity : AppCompatActivity() {
         // Back button listener
         backButton.setOnClickListener {
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }

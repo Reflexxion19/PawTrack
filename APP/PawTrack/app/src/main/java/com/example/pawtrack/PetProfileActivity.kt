@@ -24,14 +24,12 @@ class PetProfileActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pet_profile_layout)
-        val username = intent.getStringExtra("USERNAME")
-
         sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("USERNAME", null)
 
         val petRegistrationButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         petRegistrationButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -39,10 +37,6 @@ class PetProfileActivity: AppCompatActivity() {
         val petEditButton = findViewById<FloatingActionButton>(R.id.floatingEditButton)
         petEditButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetEditActivity::class.java)
-            intent.putExtra("USERNAME", username)
-            intent.putExtra("PET_NAME", sharedPreferences.getString("LastSelectedPetName", null))
-            intent.putExtra("TRACKER_ID", sharedPreferences.getString("LastSelectedTrackerId", null))
-            intent.putExtra("PET_PROFILE_PICTURE", sharedPreferences.getString("LastSelectedPetProfile", null))
             startActivity(intent)
             finish()
         }
@@ -50,7 +44,6 @@ class PetProfileActivity: AppCompatActivity() {
 
         petRegistrationButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -58,7 +51,6 @@ class PetProfileActivity: AppCompatActivity() {
         val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         profileButton.setOnClickListener(){
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -66,8 +58,6 @@ class PetProfileActivity: AppCompatActivity() {
         val backButton = findViewById<Button>(R.id.button)
         backButton.setOnClickListener(){
             val intent = Intent(applicationContext, HomePageActivity::class.java)
-            intent.putExtra("USERNAME", username)
-            intent.putExtra("PET_ID", sharedPreferences.getString("LastSelectedPetId", null))
             startActivity(intent)
             finish()
         }
@@ -168,10 +158,13 @@ class PetProfileActivity: AppCompatActivity() {
                 val selectedPetName = parsedList[position]["n"]
                 val selectedTrackerId = parsedList[position]["t_i"]
                 val selectedPetPhoto = parsedList[position]["p_p"]
-                sharedPreferences.edit().putString("LastSelectedPetProfile", selectedPetPhoto).apply()
-                sharedPreferences.edit().putString("LastSelectedTrackerId", selectedTrackerId).apply()
-                sharedPreferences.edit().putString("LastSelectedPetName", selectedPetName).apply()
-                sharedPreferences.edit().putString("LastSelectedPetId", selectedPetId).apply()
+                sharedPreferences.edit().apply {
+                    putString("LastSelectedPetProfile", selectedPetPhoto)
+                    putString("LastSelectedTrackerId", selectedTrackerId)
+                    putString("LastSelectedPetName", selectedPetName)
+                    putString("LastSelectedPetId", selectedPetId)
+                    apply()
+                }
             }
         })
     }

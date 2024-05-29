@@ -10,6 +10,7 @@
     <string name="btn_remind_password">Priminti slaptažodį</string>
     <string name="string_summary">Santrauka</string>
     <string name="string_routes">Maršrutai</string>
+    <string name="string_yearly_review">Metų apžvalga</string>
     <string name="string_your_pets_activity">Jūsų augintinio veikla</string>
     <string name="string_calories_burned">Sudegintos kalorijos</string>
     <string name="string_steps">Žingsniai</string>
@@ -118,5 +119,10 @@
     <string name="string_Dark_theme">Tamsus režimas</string>
     <string name="string_Settings">Nustatymai</string>
     <string name="string_About">Apie</string>
+    <string name="string_Review_of">Metų apžvalga</string>
+    <string name="string_Distance_Chart">Nueito atstumo diagrama</string>
+    <string name="string_Active_days_Chart">Aktyvių dienų diagrama</string>
     <string name="switch_tracking_label">Sekimo tipas (rankinis/automatinis)</string>
+    <string name="string_active_time">Pasivaiksčiojimo trukmė</string>
+    <string name="string_Calories_burned_Chart">Sudegintų kalorijų diagrama</string>
 </resources>

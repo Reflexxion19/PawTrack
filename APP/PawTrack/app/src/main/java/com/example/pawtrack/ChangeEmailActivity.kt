@@ -1,20 +1,25 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
-import java.io.IOException
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 class ChangeEmailActivity : AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.change_email_layout)
-        val username = intent.getStringExtra("USERNAME")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("USERNAME", null)
         val newEmailEditText = findViewById<EditText>(R.id.editText2)
         val buttonChangePassword = findViewById<Button>(R.id.signinbutton)
 
@@ -77,7 +82,6 @@ class ChangeEmailActivity : AppCompatActivity() {
         val returnButton = findViewById<Button>(R.id.button)
         returnButton.setOnClickListener {
             val intent = Intent(applicationContext, UserSettingsActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
         }
     }

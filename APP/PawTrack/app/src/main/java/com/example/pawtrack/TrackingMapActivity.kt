@@ -1,7 +1,9 @@
 package com.example.pawtrack
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.location.Location
@@ -63,10 +65,13 @@ class TrackingMapActivity : AppCompatActivity() {
     private var startTime = 0L
     private var endTime = 0L
     private val pathPoints = mutableListOf<TimedGeoPoint>()
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tracking_map_layout)
-        val username = intent.getStringExtra("USERNAME")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val pet_id = sharedPreferences.getString("LastSelectedPetId", null)
+        val username = sharedPreferences.getString("USERNAME", null)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.tracking
         setupMap()
@@ -81,45 +86,39 @@ class TrackingMapActivity : AppCompatActivity() {
         val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
         profileButton.setOnClickListener(){
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
 
         val startButton = findViewById<Button>(R.id.btnPetStart)
         startButton.setOnClickListener(){
-            toggleTracking(startButton)
+            toggleTracking(startButton, pet_id)
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.home -> {
                     val intent = Intent(applicationContext, HomePageActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.map -> {
                     val intent = Intent(applicationContext, MapActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.tracking -> {
                     val intent = Intent(applicationContext, TrackingActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.statistics -> {
                     val intent = Intent(applicationContext, StatisticsActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
                 R.id.subscription -> {
                     val intent = Intent(applicationContext, SubscriptionActivity::class.java)
-                    intent.putExtra("USERNAME", username)
                     startActivity(intent)
                     true
                 }
@@ -173,7 +172,7 @@ class TrackingMapActivity : AppCompatActivity() {
         }
     }
 
-    private fun toggleTracking(startButton: Button) {
+    private fun toggleTracking(startButton: Button, pet_id: String?) {
         isTracking = !isTracking
 
         if (isTracking) {
@@ -186,7 +185,7 @@ class TrackingMapActivity : AppCompatActivity() {
         } else {
             endGeoPoint = myLocationOverlay?.myLocation
             endTime = System.currentTimeMillis()  // Save the end time
-            saveTrip(startGeoPoint, endGeoPoint)
+            saveTrip(startGeoPoint, endGeoPoint, pet_id)
             myLocationOverlay?.disableFollowLocation()
             stopLocationPolling()
         }
@@ -227,7 +226,7 @@ class TrackingMapActivity : AppCompatActivity() {
         return sdf.format(Date(timestamp))
     }
 
-    private fun saveTrip(start: GeoPoint?, end: GeoPoint?) {
+    private fun saveTrip(start: GeoPoint?, end: GeoPoint?, pet_id: String?) {
         val JSON = "application/json; charset=utf-8".toMediaType()
         val elapsedMillis = endTime - startTime
         val hours = elapsedMillis / 3600000
@@ -241,7 +240,7 @@ class TrackingMapActivity : AppCompatActivity() {
         json.put("d_w", "0");
         json.put("c_b", "50");
         json.put("a_t", "$a_t");
-        json.put("p", "1");
+        json.put("p", pet_id);
 
         Log.d("PostData", json.toString())
         val body: RequestBody = json.toString().toRequestBody(JSON)

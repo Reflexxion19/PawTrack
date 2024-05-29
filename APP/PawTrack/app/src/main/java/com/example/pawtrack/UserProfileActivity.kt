@@ -2,18 +2,19 @@ package com.example.pawtrack
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 
 class UserProfileActivity: AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_profile_layout)
-        val username = intent.getStringExtra("USERNAME")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("USERNAME", null)
 
         val usernameText = findViewById<TextView>(R.id.textView)
         usernameText.text = username
@@ -21,21 +22,18 @@ class UserProfileActivity: AppCompatActivity() {
         val preferencesButton = findViewById<Button>(R.id.button4)
         preferencesButton.setOnClickListener() {
             val intent = Intent(applicationContext, UserPreferencesActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
         val backButton = findViewById<Button>(R.id.button)
         backButton.setOnClickListener() {
             val intent = Intent(applicationContext, HomePageActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
         val userSettingsButton = findViewById<Button>(R.id.button3)
         userSettingsButton.setOnClickListener() {
             val intent = Intent(applicationContext, UserSettingsActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -55,22 +53,13 @@ class UserProfileActivity: AppCompatActivity() {
         val aboutButton = findViewById<Button>(R.id.button6)
         aboutButton.setOnClickListener {
             val intent = Intent(applicationContext, AboutActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
     }
     fun clearAllPreferences(context: Context) {
-        val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            "user_preferences",
-            masterKey,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-
-        with(sharedPreferences.edit()){
+        val sharedPreferences = context.getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
             clear()
             apply()
         }

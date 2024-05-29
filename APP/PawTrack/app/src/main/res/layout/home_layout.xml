@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="70dp"
-                android:text="@string/string_move"
+                android:text="@string/string_calories_burned"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -86,27 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="90dp"
-                android:text="2/120 kcal"
                 android:textColor="@color/app_theme"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="110dp"
-                android:text="@string/string_steps"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="130dp"
-                android:text="152"
                 android:textStyle="bold" />
 
             <TextView
@@ -114,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="150dp"
+                android:layout_marginTop="110dp"
                 android:text="@string/string_distance"
                 android:textColor="#000000"
                 android:textSize="16sp" />
@@ -124,8 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="170dp"
-                android:text="0,09 km" />
+                android:layout_marginTop="130dp" />
 
             <com.mikhaellopez.circularprogressbar.CircularProgressBar
                 android:id="@+id/progressBar"
@@ -138,7 +117,6 @@
                 android:layout_marginBottom="20dp"
                 android:minWidth="200dp"
                 android:minHeight="200dp"
-                app:cpb_progress="152"
                 app:cpb_progress_max="2000"
                 app:cpb_progressbar_color="@color/app_theme" />
         </androidx.cardview.widget.CardView>

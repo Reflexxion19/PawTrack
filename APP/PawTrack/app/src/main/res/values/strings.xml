@@ -10,6 +10,7 @@
     <string name="btn_remind_password">Remind my password</string>
     <string name="string_summary">Summary</string>
     <string name="string_routes">Routes</string>
+    <string name="string_yearly_review">Yearly Review</string>
     <string name="string_your_pets_activity">Your Pets Activity</string>
     <string name="string_calories_burned">Calories Burned</string>
     <string name="string_steps">Steps</string>
@@ -110,6 +111,7 @@
     <string name="string_about_authors_label">Authors</string>
     <string name="string_about_authors">Simonas Radžius\nPatricija Babenskaitė\nAugustė Eigelytė\nDovydas Katinas\nUgnius Rinkevičius\nElijus Žekonis</string>
     <string name="string_about">About</string>
+    <string name="string_active_time">Activity time</string>
     <string name="string_Message">Message</string>
     <string name="string_Time">Time</string>
     <string name="string_Repeat">Repeat</string>
@@ -117,7 +119,11 @@
     <string name="string_Language">Language</string>
     <string name="string_Dark_theme">Dark theme</string>
     <string name="string_Settings">Settings</string>
-    <string name="string_About"> About </string>
+    <string name="string_About">About</string>
+    <string name="string_Review_of">Review of</string>
+    <string name="string_Distance_Chart">Distance Chart</string>
+    <string name="string_Active_days_Chart">Active days Chart</string>
+    <string name="string_Calories_burned_Chart">Calories burned Chart</string>
     <string name="switch_tracking_label">Tracking type (manual/automatic)</string>
 </resources>
 

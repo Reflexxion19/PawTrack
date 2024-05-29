@@ -1,6 +1,8 @@
 package com.example.pawtrack
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -14,10 +16,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class PetRegistrationActivity: AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_pet_layout)
-        val username = intent.getStringExtra("USERNAME")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("USERNAME", null)
 
 
         val petNameText = findViewById<EditText>(R.id.editTextText)
@@ -41,7 +45,6 @@ class PetRegistrationActivity: AppCompatActivity() {
         val backButton = findViewById<Button>(R.id.button)
         backButton.setOnClickListener(){
             val intent = Intent(applicationContext, PetProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -107,7 +110,6 @@ class PetRegistrationActivity: AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                             val intent = Intent(applicationContext, PetProfileActivity::class.java)
-                            intent.putExtra("USERNAME", username)
                             startActivity(intent)
                             finish()
                         }

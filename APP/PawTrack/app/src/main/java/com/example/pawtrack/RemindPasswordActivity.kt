@@ -9,7 +9,7 @@ class RemindPasswordActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.forgot_password_layout)
-        val returnButton = findViewById<Button>(R.id.button2)
+        val returnButton = findViewById<Button>(R.id.signinbutton)
         returnButton.setOnClickListener {
             val intent = Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)

@@ -1,7 +1,9 @@
 package com.example.pawtrack
 
 import CircleTransform
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -18,13 +20,15 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class PetEditActivity: AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_pet_layout)
-        val username = intent.getStringExtra("USERNAME")
-        val pet_name = intent.getStringExtra("PET_NAME")
-        val tracker_id = intent.getStringExtra("TRACKER_ID")
-        val pet_profile_picture = intent.getStringExtra("PET_PROFILE_PICTURE")
+        sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
+        val username = sharedPreferences.getString("USERNAME", null)
+        val pet_name = sharedPreferences.getString("LastSelectedPetName", null)
+        val tracker_id = sharedPreferences.getString("LastSelectedTrackerId", null)
+        val pet_profile_picture = sharedPreferences.getString("LastSelectedPetProfile", null)
 
         val petNameText = findViewById<EditText>(R.id.editTextText)
         val petTrackerID = findViewById<EditText>(R.id.editTextText2)
@@ -63,7 +67,6 @@ class PetEditActivity: AppCompatActivity() {
         val backButton = findViewById<Button>(R.id.button)
         backButton.setOnClickListener() {
             val intent = Intent(applicationContext, PetProfileActivity::class.java)
-            intent.putExtra("USERNAME", username)
             startActivity(intent)
             finish()
         }
@@ -132,7 +135,6 @@ class PetEditActivity: AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                             val intent = Intent(applicationContext, PetProfileActivity::class.java)
-                            intent.putExtra("USERNAME", username)
                             startActivity(intent)
                             finish()
                         }
