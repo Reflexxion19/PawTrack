@@ -7,10 +7,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Switch
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import com.example.pawtrack.HomePageActivity
 import com.example.pawtrack.Map.MapActivity
 import com.example.pawtrack.Pet.PetProfileActivity
@@ -47,7 +52,6 @@ class TrackingActivity : AppCompatActivity() {
                 // Handle the fetched data if needed
             }
         }, pet_id)
-        performGetRequest(username, pet_id)
 
         val petprofileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
         petprofileButton.setOnClickListener {
@@ -118,6 +122,7 @@ class TrackingActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        performGetRequest(username, pet_id)
     }
 
 
@@ -193,7 +198,6 @@ class TrackingActivity : AppCompatActivity() {
             })
 
     }
-
 
     private fun performStatisticsGetRequest(onDataFetched: StatisticsActivity.OnDataFetched, pet_id: String?) {
         val httpUrl = HttpUrl.Builder()
@@ -289,7 +293,112 @@ class TrackingActivity : AppCompatActivity() {
             }
         }
     }
+    private fun createCardViews(parsedData: List<Map<String, String?>>) {
+        val cardContainer = findViewById<LinearLayout>(R.id.recentActivietiesContainer)
+        cardContainer.removeAllViews()
 
+        for (activity in parsedData) {
+            val cardView = CardView(this).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).also { it.setMargins(30, 50, 30, 60) }
+                cardElevation = 4f
+                radius = 30f
+                setCardBackgroundColor(ContextCompat.getColor(context, R.color.edit_text_background))
+                isClickable = true // Make the card view clickable
+            }
+
+            val cardContentLayout = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val tableLayout = TableLayout(this).apply {
+                layoutParams = TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT
+                )
+                setPadding(30, 30, 30, 30)
+            }
+
+            val headerRow = TableRow(this).apply {
+                layoutParams = TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val caloriesHeader = TextView(this).apply {
+                text = "Calories burned"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                setTypeface(null, android.graphics.Typeface.BOLD)
+                setPadding(20, 10, 15, 10)
+            }
+
+            val distanceHeader = TextView(this).apply {
+                text = "Distance walked"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                setTypeface(null, android.graphics.Typeface.BOLD)
+                setPadding(20, 10, 15, 10)
+            }
+
+            val activeTimeHeader = TextView(this).apply {
+                text = "Active time"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                setTypeface(null, android.graphics.Typeface.BOLD)
+                setPadding(20, 10, 15, 10)
+            }
+
+            headerRow.addView(caloriesHeader)
+            headerRow.addView(distanceHeader)
+            headerRow.addView(activeTimeHeader)
+            tableLayout.addView(headerRow)
+
+            val dataRow = TableRow(this).apply {
+                layoutParams = TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            val caloriesData = TextView(this).apply {
+                text = activity["calories"] ?: "N/A"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                setPadding(20, 10, 15, 10)
+            }
+
+            val distanceData = TextView(this).apply {
+                text = activity["distance"] ?: "N/A"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, R.color.app_theme))
+                setPadding(20, 10, 15, 10)
+            }
+
+            val activeTimeData = TextView(this).apply {
+                text = activity["active_time"] ?: "N/A"
+                textSize = 16f
+                setTextColor(ContextCompat.getColor(context, android.R.color.black))
+                setPadding(20, 10, 15, 10)
+            }
+
+            dataRow.addView(caloriesData)
+            dataRow.addView(distanceData)
+            dataRow.addView(activeTimeData)
+            tableLayout.addView(dataRow)
+
+            cardContentLayout.addView(tableLayout)
+            cardView.addView(cardContentLayout)
+            cardContainer.addView(cardView)
+        }
+    }
     private fun performGetRequest(username: String?, pet_id: String?) {
         if (pet_id.isNullOrEmpty()) {
             runOnUiThread {
@@ -304,7 +413,7 @@ class TrackingActivity : AppCompatActivity() {
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("pvp.seriouss.am")
-            .addQueryParameter("type", "g_a_r")
+            .addQueryParameter("type", "g_w_a")
             .addQueryParameter("p", pet_id)
             .build()
         Log.d("GetReq", "$httpUrl")
@@ -317,7 +426,8 @@ class TrackingActivity : AppCompatActivity() {
         client.newCall(request).enqueue(object : okhttp3.Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 runOnUiThread {
-                    Toast.makeText(applicationContext, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Failed to fetch data", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 e.printStackTrace()
             }
@@ -327,16 +437,17 @@ class TrackingActivity : AppCompatActivity() {
                     val responseBodyString = response.body?.string() ?: ""
                     val parsedData = parseResponse(responseBodyString)
                     runOnUiThread {
-                        updateActivityTextViews(parsedData)
+                        createCardViews(parsedData)
                     }
                 }
             }
         })
     }
-    private fun parseResponse(response: String): Map<String, String?> {
+
+    private fun parseResponse(response: String): List<Map<String, String?>> {
         val lines = response.split("\n")
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        var mostRecentActivity: Map<String, String?>? = null
+        val parsedActivities = mutableListOf<Map<String, String?>>()
 
         for (line in lines) {
             if (line.isBlank()) continue
@@ -356,22 +467,9 @@ class TrackingActivity : AppCompatActivity() {
                 "active_time" to activeTimePart
             )
 
-            if (mostRecentActivity == null || dateFormat.parse(datePart)!! > dateFormat.parse(mostRecentActivity["date"])!!) {
-                mostRecentActivity = activity
-            }
+            parsedActivities.add(activity)
         }
 
-        return mostRecentActivity ?: emptyMap()
-    }
-    private fun updateActivityTextViews(data: Map<String, String?>) {
-        val dateTextView : TextView = findViewById(R.id.textView17)
-        val distanceTextView: TextView = findViewById(R.id.textView19)
-        val caloriesTextView: TextView = findViewById(R.id.textView21)
-        val activeTimeTextView: TextView = findViewById(R.id.textView23)
-
-        dateTextView.text = data["date"] ?: "0000/00/00"
-        distanceTextView.text = (data["calories"] + " kcal") ?: "0"
-        caloriesTextView.text = (data["distance"] + " km")  ?: "0"
-        activeTimeTextView.text = data["active_time"] ?: "0"
+        return parsedActivities
     }
 }
