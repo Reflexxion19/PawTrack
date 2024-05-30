@@ -26,7 +26,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class TrackingActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
@@ -40,7 +42,7 @@ class TrackingActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.tracking
 
-        performGetRequest(object : StatisticsActivity.OnDataFetched {
+        performStatisticsGetRequest(object : StatisticsActivity.OnDataFetched {
             override fun onDataFetched(parsedList: List<Map<String, String?>>) {
                 // Handle the fetched data if needed
             }
@@ -193,7 +195,7 @@ class TrackingActivity : AppCompatActivity() {
     }
 
 
-    private fun performGetRequest(onDataFetched: StatisticsActivity.OnDataFetched, pet_id: String?) {
+    private fun performStatisticsGetRequest(onDataFetched: StatisticsActivity.OnDataFetched, pet_id: String?) {
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("pvp.seriouss.am")
@@ -221,7 +223,7 @@ class TrackingActivity : AppCompatActivity() {
                     val parsedList = parseStatisticsResponseToList(responseBodyString)
                     runOnUiThread {
                         parsedList.forEach { map ->
-                            Log.d("StatisticsActivity", "Map Data: $map")
+                            //Log.d("StatisticsActivity", "Map Data: $map")
                         }
                         val rootView = findViewById<View>(R.id.statistics)
                         onDataFetched.onDataFetched(parsedList)
@@ -243,6 +245,7 @@ class TrackingActivity : AppCompatActivity() {
                             if (parts.size == 2) {
                                 val key = parts[0].trim()
                                 val value = parts[1].trim().ifEmpty { null }
+                                Log.d("StatisticsActivity", value.toString())
                                 when (key) {
                                     "c_b" -> "calories_burned" to value
                                     "d_w" -> "distance_walked" to value
@@ -322,17 +325,53 @@ class TrackingActivity : AppCompatActivity() {
             override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                 if (response.isSuccessful) {
                     val responseBodyString = response.body?.string() ?: ""
-                    val parsedList = parseStatisticsResponseToList(responseBodyString)
+                    val parsedData = parseResponse(responseBodyString)
                     runOnUiThread {
-                        parsedList.forEach { map ->
-                            Log.d("StatisticsActivity", "Map Data: $map")
-                        }
-                        val rootView = findViewById<View>(R.id.statistics)
-                        updateTextViewsWithData(parsedList.first())
-                        updateCircularProgressBars(parsedList)
+                        updateActivityTextViews(parsedData)
                     }
                 }
             }
         })
+    }
+    private fun parseResponse(response: String): Map<String, String?> {
+        val lines = response.split("\n")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        var mostRecentActivity: Map<String, String?>? = null
+
+        for (line in lines) {
+            if (line.isBlank()) continue
+
+            val parts = line.split(";")
+            val idPart = parts[0].split("=")[1]
+            val datePart = parts[1].split("=")[1]
+            val distancePart = parts[2].split("=")[1]
+            val caloriesPart = parts[3].split("=")[1]
+            val activeTimePart = parts[4].split("=")[1]
+
+            val activity = mapOf(
+                "id" to idPart,
+                "date" to datePart,
+                "distance" to distancePart,
+                "calories" to caloriesPart,
+                "active_time" to activeTimePart
+            )
+
+            if (mostRecentActivity == null || dateFormat.parse(datePart)!! > dateFormat.parse(mostRecentActivity["date"])!!) {
+                mostRecentActivity = activity
+            }
+        }
+
+        return mostRecentActivity ?: emptyMap()
+    }
+    private fun updateActivityTextViews(data: Map<String, String?>) {
+        val dateTextView : TextView = findViewById(R.id.textView17)
+        val distanceTextView: TextView = findViewById(R.id.textView19)
+        val caloriesTextView: TextView = findViewById(R.id.textView21)
+        val activeTimeTextView: TextView = findViewById(R.id.textView23)
+
+        dateTextView.text = data["date"] ?: "0000/00/00"
+        distanceTextView.text = (data["calories"] + " kcal") ?: "0"
+        caloriesTextView.text = (data["distance"] + " km")  ?: "0"
+        activeTimeTextView.text = data["active_time"] ?: "0"
     }
 }
