@@ -98,7 +98,7 @@ class StatisticsActivity: AppCompatActivity() {
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("pvp.seriouss.am")
-            .addQueryParameter("type", "g_s") //get statistics
+            .addQueryParameter("type", "g_s")
             .addQueryParameter("p", pet_id)
             .build()
 
@@ -163,10 +163,8 @@ class StatisticsActivity: AppCompatActivity() {
 
         val caloriesBurnedTextView: TextView = findViewById(R.id.textView10)
         val distanceWalkedTextView: TextView = findViewById(R.id.textView14)
-        caloriesBurnedTextView.text = data["calories_burned"] ?: "0"
-        distanceWalkedTextView.text = data["distance_walked"] ?: "0"
-
-
+        caloriesBurnedTextView.text = data["calories_burned"] + " kcal" ?: "0"
+        distanceWalkedTextView.text = data["distance_walked"] + " km" ?: "0"
     }
     fun updateCircularProgressBars(dataList: List<Map<String, String?>>) {
         val today = Calendar.getInstance()
@@ -180,17 +178,11 @@ class StatisticsActivity: AppCompatActivity() {
             R.id.progressBar8,
             R.id.progressBar10
         )
-
+        val mainProgressBar = findViewById<CircularProgressBar>(R.id.progressBar9)
         progressBarIds.forEachIndexed { index, progressBarId ->
-            if(index == dayOfWeekNumber)
-            {
-                val mainProgressBar = findViewById<CircularProgressBar>(R.id.progressBar9)
-                val caloriesBurned = dataList.getOrNull(index)?.get("calories_burned")?.toIntOrNull() ?: 0
-                mainProgressBar.progress = caloriesBurned.toFloat()
-            }
             val progressBar = findViewById<CircularProgressBar>(progressBarId)
             val caloriesBurned = dataList.getOrNull(index)?.get("calories_burned")?.toIntOrNull() ?: 0
-
+            mainProgressBar.progress = mainProgressBar.progress + caloriesBurned.toFloat()
             progressBar.apply {
                 progress = caloriesBurned.toFloat()
             }
