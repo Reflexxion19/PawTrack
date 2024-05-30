@@ -30,6 +30,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.BoundingBox
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Polyline
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -397,6 +402,11 @@ class TrackingActivity : AppCompatActivity() {
             cardContentLayout.addView(tableLayout)
             cardView.addView(cardContentLayout)
             cardContainer.addView(cardView)
+
+            cardView.setOnClickListener {
+                cardView.isClickable = false // Disable further clicks
+                performGetLongLatRequest(cardView, activity["id"])
+            }
         }
     }
     private fun performGetRequest(username: String?, pet_id: String?) {
@@ -471,5 +481,109 @@ class TrackingActivity : AppCompatActivity() {
         }
 
         return parsedActivities
+    }
+    private fun performGetLongLatRequest(cardView: CardView, id: String?) {
+        val httpUrl = HttpUrl.Builder()
+            .scheme("https")
+            .host("pvp.seriouss.am")
+            .addQueryParameter("type", "g_l_p")
+            .addQueryParameter("a_r_i", id)
+            .build()
+        Log.d("GetReq", "$httpUrl")
+        val request = Request.Builder()
+            .url(httpUrl)
+            .get()
+            .build()
+
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(applicationContext, "Failed to fetch data", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val pointsList = parsePoints(responseBody)
+                    runOnUiThread {
+                        if(pointsList.isNotEmpty())
+                        {
+                            AddMapViewToCardView(cardView, pointsList)
+                        }
+                    }
+                }
+            }
+        })
+    }
+    private fun parsePoints(jsonString: String?): List<GeoPoint> {
+        val pointsList = mutableListOf<GeoPoint>()
+        jsonString?.let {
+            val lines = it.split("\n")
+            for (line in lines) {
+                if (line.isNotBlank()) {
+                    val latLong = line.split(";")
+                    if (latLong.size == 2) {
+                        val lat = latLong[0].split("=")[1].toDoubleOrNull()
+                        val long = latLong[1].split("=")[1].toDoubleOrNull()
+                        if (lat != null && long != null) {
+                            pointsList.add(GeoPoint(lat, long))
+                        }
+                    }
+                }
+            }
+        }
+        return pointsList
+    }
+    private fun AddMapViewToCardView(cardView: CardView, mapPoints: List<GeoPoint>) {
+        val mapView = MapView(this).apply {
+            id = View.generateViewId()
+
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                300
+            ).also {
+                it.setMargins(0, 20, 0, 0)
+            }
+            setTileSource(TileSourceFactory.MAPNIK)
+            setMultiTouchControls(true)
+            isClickable = true
+        }
+
+        val existingMapView = cardView.findViewById<MapView>(mapView.id)
+        if (existingMapView == null) {
+            setupDynamicMap(mapView, mapPoints)
+
+            val cardContentLayout = cardView.getChildAt(0) as LinearLayout
+            cardContentLayout.addView(mapView)
+
+            cardView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).also { it.setMargins(30, 50, 30, 60) }
+        } else {
+            existingMapView.visibility = if (existingMapView.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+    }
+    private fun setupDynamicMap(mapView: MapView, geoPoints: List<GeoPoint>) {
+        mapView.apply {
+            setBuiltInZoomControls(false)
+            setMultiTouchControls(true)
+            controller.setCenter(geoPoints.first())
+            controller.setZoom(15)
+            Log.d("GetReq", geoPoints.toString())
+            val polyline = Polyline().also { line ->
+                line.setPoints(geoPoints)
+                overlays.add(line)
+            }
+
+            val boundingBox = BoundingBox.fromGeoPoints(geoPoints)
+            controller.setCenter(boundingBox.centerWithDateLine)
+            controller.zoomToSpan(boundingBox.latitudeSpan, boundingBox.longitudeSpan)
+            controller.setZoom(15)
+        }
     }
 }
