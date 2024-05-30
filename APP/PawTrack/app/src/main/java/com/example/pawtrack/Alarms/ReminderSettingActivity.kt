@@ -23,6 +23,7 @@ import com.example.pawtrack.R
 import com.example.pawtrack.Tracking.StatisticsActivity
 import com.example.pawtrack.Tracking.TrackingActivity
 import com.example.pawtrack.User.SubscriptionActivity
+import com.example.pawtrack.User.UserProfileActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -63,6 +64,13 @@ class ReminderSettingActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        val backButton = findViewById<Button>(R.id.buttonBack)
+        backButton.setOnClickListener() {
+            val intent = Intent(applicationContext, UserProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

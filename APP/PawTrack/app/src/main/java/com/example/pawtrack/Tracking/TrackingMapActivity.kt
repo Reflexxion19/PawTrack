@@ -39,11 +39,15 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.IOException
+import java.lang.Math.cos
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.timerTask
+import kotlin.math.atan2
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 class CustomLocationOverlay(provider: IMyLocationProvider, map: MapView, private val updatePathCallback: (GeoPoint) -> Unit) : MyLocationNewOverlay(provider, map) {
@@ -231,6 +235,28 @@ class TrackingMapActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return sdf.format(Date(timestamp))
     }
+    fun haversine(start: GeoPoint?, end: GeoPoint?): Double {
+        if (start == null || end == null) {
+            throw IllegalArgumentException("Start and end points must not be null")
+        }
+
+        val R = 6371.0 // Radius of the Earth in kilometers
+
+        val lat1 = Math.toRadians(start.latitude)
+        val lon1 = Math.toRadians(start.longitude)
+        val lat2 = Math.toRadians(end.latitude)
+        val lon2 = Math.toRadians(end.longitude)
+
+        val dLat = lat2 - lat1
+        val dLon = lon2 - lon1
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(lat1) * cos(lat2) *
+                sin(dLon / 2) * sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return R * c // Distance in kilometers
+    }
 
     private fun saveTrip(start: GeoPoint?, end: GeoPoint?, pet_id: String?) {
         val JSON = "application/json; charset=utf-8".toMediaType()
@@ -240,11 +266,16 @@ class TrackingMapActivity : AppCompatActivity() {
         val seconds = (elapsedMillis % 60000) / 1000
         val a_t = String.format("%02d:%02d:%02d", hours, minutes, seconds)
         val d_t = formatDate(startTime)
+
+        val averageWeight= 75 // in pounds
+        val distance = haversine(start, end)
+        val calories = distance * averageWeight * 0.8
+
         val json = JSONObject()
         json.put("type", "r");
         json.put("dt", "$d_t");
         json.put("d_w", "0");
-        json.put("c_b", "50"); // CALC DIST AND MULTIPLY BY AVG DOG WEIGHT :-)
+        json.put("c_b", "$calories"); // CALC DIST AND MULTIPLY BY AVG DOG WEIGHT :-)
         json.put("a_t", "$a_t");
         json.put("p", pet_id);
 
