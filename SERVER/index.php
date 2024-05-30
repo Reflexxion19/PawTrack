@@ -122,6 +122,20 @@ class DB_handler{
         }
     }
 
+    public function get_weeks_activities($pet_id){
+        $sql = "SELECT `id`, `date`, `distance_walked`, `calories_burned`, `active_time`
+            FROM `activity_report`
+            WHERE `date` >= DATE_SUB(CURRENT_DATE, INTERVAL WEEKDAY(CURRENT_DATE) DAY)
+            AND `date` < DATE_ADD(CURRENT_DATE, INTERVAL (7 - WEEKDAY(CURRENT_DATE)) DAY)
+            AND `fk_Petid` = $pet_id;";
+        $result = mysqli_query($this->conn, $sql);
+        
+        while($row = mysqli_fetch_assoc($result))
+        {
+            echo "id=" . $row['id'] . ";d=" . $row['date'] . ";c_b=" . $row['calories_burned'] . ";d_w=" . $row['distance_walked'] . ";a_t=" . $row['active_time'] . "\n";
+        }
+    }
+
     public function get_image($id, $type){
         $result = '';
         if($type == 'user'){
@@ -410,6 +424,12 @@ if($db->conn){
                 $pet_id = $parsed_data['p'];
 
                 $db->get_activity_reports($pet_id);
+            }
+
+            if($parsed_data['type'] == 'g_w_a'){ # get weeks activities
+                $pet_id = $parsed_data['p'];
+
+                $db->get_weeks_activities($pet_id);
             }
 
             if($parsed_data['type'] == 'g_l_p'){ # get location points
