@@ -15,6 +15,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.pawtrack.Alarms.ReminderSettingActivity
 import com.example.pawtrack.AppInterface.MainViewModel
 import com.example.pawtrack.Map.MapActivity
+import com.example.pawtrack.Pet.PetProfileActivity
 import com.example.pawtrack.User.LoginActivity
 import java.util.Locale
 
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(loginIntent)
             finish()
         } else {
-            val homeIntent = Intent(this, HomePageActivity::class.java)
+            val homeIntent = Intent(this, PetProfileActivity::class.java)
             startActivity(homeIntent)
             finish()
         }

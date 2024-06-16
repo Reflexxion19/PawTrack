@@ -140,7 +140,6 @@ class HomePageActivity: AppCompatActivity() {
         Log.d("MainActivity", username.toString() + pet_id.toString())
         if (pet_id.isNullOrEmpty()) {
             runOnUiThread {
-                Toast.makeText(applicationContext, "Select a pet first", Toast.LENGTH_SHORT).show()
                 val intent = Intent(applicationContext, PetProfileActivity::class.java)
                 startActivity(intent)
                 finish()

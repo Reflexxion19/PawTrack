@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -21,71 +23,97 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
-class PetProfileActivity: AppCompatActivity() {
+class PetProfileActivity : AppCompatActivity() {
     private lateinit var adapter: PetFragmentPageAdapter
     private lateinit var sharedPreferences: SharedPreferences
+
     interface OnDataFetched {
         fun onDataFetched(parsedList: List<Map<String, String?>>)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pet_profile_layout)
         sharedPreferences = getSharedPreferences("PawTrackPrefs", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("USERNAME", null)
-        val lastSelectedPetId = sharedPreferences.getString("LastSelectedPetName", null)
+
         val petRegistrationButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        petRegistrationButton.setOnClickListener(){
-            val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        val petEditButton = findViewById<FloatingActionButton>(R.id.floatingEditButton)
-        petEditButton.setOnClickListener(){
-            val intent = Intent(applicationContext, PetEditActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-
-        petRegistrationButton.setOnClickListener(){
+        petRegistrationButton.setOnClickListener {
             val intent = Intent(applicationContext, PetRegistrationActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        profileButton.setOnClickListener(){
+        profileButton.setOnClickListener {
+            val intent = Intent(applicationContext, UserProfileActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        performGetRequest(username, object : OnDataFetched {
+            override fun onDataFetched(parsedList: List<Map<String, String?>>) {
+                if (parsedList.isEmpty()) {
+                    petRegistrationButton.show()
+                    hideOtherButtons()
+                    showNoPetsText()
+                    Toast.makeText(applicationContext,"Create a pet profile.", Toast.LENGTH_SHORT).show()
+                } else {
+                    setupButtons()
+                    setupViewPager(parsedList)
+                }
+            }
+        })
+    }
+
+    private fun showNoPetsText() {
+        val noPetsTextView = findViewById<TextView>(R.id.textView11)
+        noPetsTextView.text = "Create a pet profile by pressing the plus sign."
+    }
+    private fun hideOtherButtons() {
+        val petEditButton = findViewById<FloatingActionButton>(R.id.floatingEditButton)
+        val backButton = findViewById<Button>(R.id.button)
+        val removeButton = findViewById<FloatingActionButton>(R.id.removePet)
+
+        petEditButton.visibility = View.GONE
+        backButton.visibility = View.GONE
+        removeButton.visibility = View.GONE
+    }
+
+    private fun setupButtons() {
+        val lastSelectedPetId = sharedPreferences.getString("LastSelectedPetName", null)
+
+        val petEditButton = findViewById<FloatingActionButton>(R.id.floatingEditButton)
+        petEditButton.setOnClickListener {
+            val intent = Intent(applicationContext, PetEditActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
+        profileButton.setOnClickListener {
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         val backButton = findViewById<Button>(R.id.button)
-        backButton.setOnClickListener(){
+        backButton.setOnClickListener {
             val intent = Intent(applicationContext, HomePageActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         val removeButton = findViewById<FloatingActionButton>(R.id.removePet)
-        removeButton.setOnClickListener()
-        {
-
+        removeButton.setOnClickListener {
+            val username = sharedPreferences.getString("USERNAME", null)
             performRemovePostRequest(username, lastSelectedPetId)
-
         }
-
-        performGetRequest(username, object : OnDataFetched {
-            override fun onDataFetched(parsedList: List<Map<String, String?>>) {
-            }
-        })
     }
 
     private fun performRemovePostRequest(username: String?, pet_id: String?) {
-        Log.d("POST",username + " " + pet_id)
-        if(!username.isNullOrEmpty() && !pet_id.isNullOrEmpty())
-        {
+        Log.d("POST", "$username $pet_id")
+        if (!username.isNullOrEmpty() && !pet_id.isNullOrEmpty()) {
             val jsonMediaType = "application/json; charset=utf-8".toMediaType()
             val json = """
                 {
@@ -93,7 +121,7 @@ class PetProfileActivity: AppCompatActivity() {
                     "p_n": "$pet_id",
                     "u_n": "$username"
                 }
-                """.trimIndent()
+            """.trimIndent()
             val body = json.toRequestBody(jsonMediaType)
             val request = Request.Builder()
                 .url("https://pvp.seriouss.am")
@@ -114,12 +142,9 @@ class PetProfileActivity: AppCompatActivity() {
                     }
                 }
             })
+        } else {
+            Toast.makeText(applicationContext, "All fields are required", Toast.LENGTH_SHORT).show()
         }
-        else
-        {
-            Toast.makeText(applicationContext,"All fields are required", Toast.LENGTH_SHORT).show()
-        }
-
     }
 
     private fun performGetRequest(username: String?, onDataFetched: OnDataFetched) {
@@ -129,7 +154,6 @@ class PetProfileActivity: AppCompatActivity() {
             }
             return
         }
-
 
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
@@ -158,12 +182,12 @@ class PetProfileActivity: AppCompatActivity() {
                     val parsedList = parseResponseToList(responseBodyString)
                     runOnUiThread {
                         onDataFetched.onDataFetched(parsedList)
-                        setupViewPager(parsedList)
                     }
                 }
             }
         })
     }
+
     private fun parseResponseToList(response: String): List<Map<String, String?>> {
         return response.split("\n").mapNotNull { petInfo ->
             if (petInfo.isNotBlank()) {
@@ -180,31 +204,34 @@ class PetProfileActivity: AppCompatActivity() {
             }
         }
     }
+
     private fun setupViewPager(parsedList: List<Map<String, String?>>) {
         val viewPager = findViewById<ViewPager2>(R.id.viewPagerPetProfiles)
         val tabLayout = findViewById<TabLayout>(R.id.tabDots)
-        adapter = PetFragmentPageAdapter(supportFragmentManager, lifecycle, parsedList);
+        adapter = PetFragmentPageAdapter(supportFragmentManager, lifecycle, parsedList)
+        viewPager.adapter = adapter
+
+        tabLayout.removeAllTabs()
         parsedList.forEach { pet ->
             tabLayout.addTab(tabLayout.newTab())
         }
+
         val lastSelectedPetId = sharedPreferences.getString("LastSelectedPetId", null)
         val initialPosition = parsedList.indexOfFirst { it["i"] == lastSelectedPetId }.takeIf { it >= 0 } ?: 0
-        adapter.setArguments(1)
-        viewPager.adapter = adapter
-        tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+        viewPager.setCurrentItem(initialPosition, false)
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if(tab != null)
-                {
-                    viewPager.currentItem = tab.position
+                tab?.let {
+                    viewPager.currentItem = it.position
                 }
             }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
 
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 tabLayout.selectTab(tabLayout.getTabAt(position))
