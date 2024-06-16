@@ -201,9 +201,7 @@ class TrackingMapActivity : AppCompatActivity() {
             endTime = System.currentTimeMillis()  // Save the end time
             myLocationOverlay?.disableFollowLocation()
             stopLocationPolling()
-            // Redirect to Home Page after stopping
-            val intent = Intent(applicationContext, HomePageActivity::class.java)
-            startActivity(intent)
+            saveTrip(startGeoPoint, endGeoPoint, pet_id)
         }
 
         updateButtonAndIcon(startButton)
