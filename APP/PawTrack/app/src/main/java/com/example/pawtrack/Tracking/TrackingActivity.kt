@@ -3,6 +3,7 @@ package com.example.pawtrack.Tracking
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -270,7 +271,7 @@ class TrackingActivity : AppCompatActivity() {
     fun updateTextViewsWithData(data: Map<String, String?>) {
         val caloriesBurnedTextView: TextView = findViewById(R.id.textView10)
         val distanceWalkedTextView: TextView = findViewById(R.id.textView14)
-        caloriesBurnedTextView.text = (data["calories_burned"] + " kcal") ?: "0"
+        caloriesBurnedTextView.text = (data["calories_burned"] + "/200 kcal") ?: "0"
         distanceWalkedTextView.text = (data["distance_walked"] + " km") ?: "0"
     }
 
@@ -289,6 +290,10 @@ class TrackingActivity : AppCompatActivity() {
             val caloriesBurned = dataList.getOrNull(index)?.get("calories_burned")?.toIntOrNull() ?: 0
 
             progressBar.apply {
+                if(progress >= 200)
+                {
+                    progressBar.progressBarColor = Color.GREEN
+                }
                 progress = caloriesBurned.toFloat()
             }
         }

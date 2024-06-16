@@ -120,7 +120,7 @@ class RouteActivity : AppCompatActivity() {
         val httpUrl = HttpUrl.Builder()
             .scheme("https")
             .host("pvp.seriouss.am")
-            .addQueryParameter("type", "g_a_r")
+            .addQueryParameter("type", "g_a_r") //g_w_a
             .addQueryParameter("p", pet_id)
             .build()
         Log.d("GetReq", "$httpUrl")

@@ -99,7 +99,6 @@ class YearlyReviewActivity: AppCompatActivity() {
     private fun setupDistanceChart(entries: List<BarEntry>) {
         if (::distanceChart.isInitialized) {
             val dataSet = BarDataSet(entries, "Distance Covered (km)").apply {
-                color = ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
                 valueTextColor = ContextCompat.getColor(this@YearlyReviewActivity,
                     R.color.app_theme_light
                 )
@@ -109,6 +108,11 @@ class YearlyReviewActivity: AppCompatActivity() {
                         return "$value km"
                     }
                 }
+
+                setColors(entries.map {
+                    if (it.y >= 10) ContextCompat.getColor(this@YearlyReviewActivity, R.color.green)
+                    else ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
+                })
             }
 
             val barData = BarData(dataSet)
@@ -147,24 +151,23 @@ class YearlyReviewActivity: AppCompatActivity() {
         }
     }
 
-
-
-
-
-
     private fun setupCaloriesChart(entries: List<BarEntry>) {
         if (::caloriesChart.isInitialized) {
-            val dataSet = BarDataSet(entries, "Calories Burned (kcal)").apply {
-                color = ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
+            val dataSet = BarDataSet(entries, "Distance Covered (km)").apply {
                 valueTextColor = ContextCompat.getColor(this@YearlyReviewActivity,
                     R.color.app_theme_light
                 )
                 valueTextSize = 12f
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
-                        return "$value kcal"
+                        return "$value km"
                     }
                 }
+
+                setColors(entries.map {
+                    if (it.y >= 10) ContextCompat.getColor(this@YearlyReviewActivity, R.color.green)
+                    else ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
+                })
             }
 
             val barData = BarData(dataSet)
@@ -199,65 +202,59 @@ class YearlyReviewActivity: AppCompatActivity() {
                 invalidate()
             }
         } else {
-            Log.e("YearlyReviewActivity", "Calories chart not initialized")
+            Log.e("YearlyReviewActivity", "Distance chart not initialized")
         }
     }
 
     private fun setupActiveDaysChart(entries: List<BarEntry>) {
         if (::activeDaysChart.isInitialized) {
-            // Create a DataSet from entries; the label will be "Active Days"
             val dataSet = BarDataSet(entries, "Active Days").apply {
-                // Set the color of the bars to match the app theme
-                color = ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
                 valueTextColor = ContextCompat.getColor(this@YearlyReviewActivity,
                     R.color.app_theme_light
                 )
                 valueTextSize = 12f
-                // Set a custom value formatter to append " days" to the value
                 valueFormatter = object : ValueFormatter() {
                     override fun getFormattedValue(value: Float): String {
                         return "$value days"
                     }
                 }
+                setColors(entries.map {
+                    if (it.y >= 30) ContextCompat.getColor(this@YearlyReviewActivity, R.color.green)
+                    else ContextCompat.getColor(this@YearlyReviewActivity, R.color.app_theme)
+                })
             }
 
-            // Create BarData with the dataset
             val barData = BarData(dataSet)
-            barData.barWidth = 0.9f // Optionally set the width of each bar
+            barData.barWidth = 0.9f
 
-            // Setup the Chart
-            activeDaysChart.data = barData
-
-            activeDaysChart.xAxis.apply {
-                position = XAxis.XAxisPosition.BOTTOM
-                granularity = 1f
-                setDrawGridLines(false)
-                valueFormatter = IndexAxisValueFormatter(getMonths())
-                labelCount = 12
-                textSize = 12f
+            activeDaysChart.apply {
+                data = barData
+                xAxis.apply {
+                    position = XAxis.XAxisPosition.BOTTOM
+                    granularity = 1f
+                    setDrawGridLines(false)
+                    valueFormatter = IndexAxisValueFormatter(getMonths())
+                    labelCount = 12
+                    textSize = 12f
+                }
+                axisLeft.apply {
+                    axisMinimum = 0f
+                    setDrawGridLines(false)
+                    setDrawTopYLabelEntry(true)
+                    setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
+                    granularity = 1f
+                    val highestValue = entries.maxByOrNull { it.y }?.y ?: 0f
+                    axisMaximum = highestValue
+                    labelCount = 1
+                }
+                axisRight.isEnabled = false
+                description.isEnabled = false
+                legend.isEnabled = false
+                setTouchEnabled(true)
+                setPinchZoom(true)
+                animateY(1400)
+                invalidate()
             }
-
-            activeDaysChart.axisLeft.apply {
-                axisMinimum = 0f
-                setDrawGridLines(false)
-                setDrawTopYLabelEntry(true) // Only draw the top label
-                setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART)
-                granularity = 1f // Optional: adjust as needed
-                val highestValue = entries.maxByOrNull { it.y }?.y ?: 0f
-                axisMaximum = highestValue // Set the maximum value to the highest entry
-                labelCount = 1 // Set label count to 1 to show only the highest value
-            }
-
-            activeDaysChart.axisRight.isEnabled = false // Disable right Y-axis
-
-            activeDaysChart.description.isEnabled = false
-            activeDaysChart.legend.isEnabled = false // Optionally disable the legend
-
-            activeDaysChart.setTouchEnabled(true)
-            activeDaysChart.setPinchZoom(true)
-
-            activeDaysChart.animateY(1400)
-            activeDaysChart.invalidate() // Refresh the chart
         } else {
             Log.e("YearlyReviewActivity", "Active days chart not initialized")
         }
