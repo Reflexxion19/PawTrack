@@ -39,16 +39,15 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.io.IOException
-import java.lang.Math.cos
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.Timer
 import kotlin.concurrent.timerTask
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
-
 
 class CustomLocationOverlay(provider: IMyLocationProvider, map: MapView, private val updatePathCallback: (GeoPoint) -> Unit) : MyLocationNewOverlay(provider, map) {
     override fun onLocationChanged(location: Location?, source: IMyLocationProvider?) {
@@ -59,10 +58,12 @@ class CustomLocationOverlay(provider: IMyLocationProvider, map: MapView, private
         }
     }
 }
+
 data class TimedGeoPoint(
     val geoPoint: GeoPoint,
     val timestamp: Long
 )
+
 class TrackingMapActivity : AppCompatActivity() {
 
     private var map: MapView? = null
@@ -76,6 +77,7 @@ class TrackingMapActivity : AppCompatActivity() {
     private var endTime = 0L
     private val pathPoints = mutableListOf<TimedGeoPoint>()
     private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tracking_map_layout)
@@ -87,21 +89,21 @@ class TrackingMapActivity : AppCompatActivity() {
         setupMap()
 
         val petprofileButton = findViewById<FloatingActionButton>(R.id.pet_profile)
-        petprofileButton.setOnClickListener(){
+        petprofileButton.setOnClickListener {
             val intent = Intent(applicationContext, PetProfileActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         val profileButton = findViewById<FloatingActionButton>(R.id.floatingActionButton2)
-        profileButton.setOnClickListener(){
+        profileButton.setOnClickListener {
             val intent = Intent(applicationContext, UserProfileActivity::class.java)
             startActivity(intent)
             finish()
         }
 
         val startButton = findViewById<Button>(R.id.btnPetStart)
-        startButton.setOnClickListener(){
+        startButton.setOnClickListener {
             toggleTracking(startButton, pet_id)
         }
 
@@ -136,6 +138,7 @@ class TrackingMapActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun setupMap() {
         Configuration.getInstance().load(applicationContext, PreferenceManager.getDefaultSharedPreferences(applicationContext))
         map = findViewById(R.id.map)
@@ -164,6 +167,7 @@ class TrackingMapActivity : AppCompatActivity() {
         map?.overlays?.add(locationOverlay)
         locationOverlay?.enableMyLocation()
         locationOverlay?.enableFollowLocation()
+        myLocationOverlay = locationOverlay
     }
 
     private fun setupPathOverlay() {
@@ -195,16 +199,19 @@ class TrackingMapActivity : AppCompatActivity() {
         } else {
             endGeoPoint = myLocationOverlay?.myLocation
             endTime = System.currentTimeMillis()  // Save the end time
-            saveTrip(startGeoPoint, endGeoPoint, pet_id)
             myLocationOverlay?.disableFollowLocation()
             stopLocationPolling()
+            // Redirect to Home Page after stopping
+            val intent = Intent(applicationContext, HomePageActivity::class.java)
+            startActivity(intent)
         }
 
         updateButtonAndIcon(startButton)
     }
+
     private fun startLocationPolling() {
-        val timer = Timer()
-        timer.schedule(timerTask {
+        timer = Timer()
+        timer?.schedule(timerTask {
             runOnUiThread {
                 myLocationOverlay?.myLocation?.let {
                     updatePath(it)
@@ -212,29 +219,29 @@ class TrackingMapActivity : AppCompatActivity() {
             }
         }, 0, 10000)
     }
+
     private fun stopLocationPolling() {
         timer?.cancel()
         timer = null
     }
+
     private fun updateButtonAndIcon(startButton: Button) {
         if (isTracking) {
-            startGeoPoint = myLocationOverlay?.myLocation
             val stopIcon: Drawable? = ContextCompat.getDrawable(this, R.drawable.stop_icon)
             startButton.setCompoundDrawablesWithIntrinsicBounds(stopIcon, null, null, null)
             startButton.text = getString(R.string.map_stop)
-            myLocationOverlay?.disableFollowLocation()
         } else {
-            startGeoPoint = myLocationOverlay?.myLocation
             val startIcon: Drawable? = ContextCompat.getDrawable(this, R.drawable.start_icon)
             startButton.setCompoundDrawablesWithIntrinsicBounds(startIcon, null, null, null)
             startButton.text = getString(R.string.map_start)
-            myLocationOverlay?.enableFollowLocation()
         }
     }
+
     private fun formatDate(timestamp: Long): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return sdf.format(Date(timestamp))
     }
+
     fun haversine(start: GeoPoint?, end: GeoPoint?): Double {
         if (start == null || end == null) {
             throw IllegalArgumentException("Start and end points must not be null")
@@ -259,93 +266,94 @@ class TrackingMapActivity : AppCompatActivity() {
     }
 
     private fun saveTrip(start: GeoPoint?, end: GeoPoint?, pet_id: String?) {
-        val JSON = "application/json; charset=utf-8".toMediaType()
-        val elapsedMillis = endTime - startTime
-        val hours = elapsedMillis / 3600000
-        val minutes = (elapsedMillis % 3600000) / 60000
-        val seconds = (elapsedMillis % 60000) / 1000
-        val a_t = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-        val d_t = formatDate(startTime)
+        try {
+            val JSON = "application/json; charset=utf-8".toMediaType()
+            val elapsedMillis = endTime - startTime
+            val hours = elapsedMillis / 3600000
+            val minutes = (elapsedMillis % 3600000) / 60000
+            val seconds = (elapsedMillis % 60000) / 1000
+            val a_t = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            val d_t = formatDate(startTime)
 
-        val averageWeight= 75 // in pounds
-        val distance = haversine(start, end)
-        val calories = distance * averageWeight * 0.8
+            val averageWeight = 75
+            val distance = haversine(start, end)
+            val calories = distance * averageWeight * 0.8
 
-        val json = JSONObject()
-        json.put("type", "r");
-        json.put("dt", "$d_t");
-        json.put("d_w", "0");
-        json.put("c_b", "$calories"); // CALC DIST AND MULTIPLY BY AVG DOG WEIGHT :-)
-        json.put("a_t", "$a_t");
-        json.put("p", pet_id);
+            val json = JSONObject()
+            json.put("type", "r")
+            json.put("dt", "$d_t")
+            json.put("d_w", "$distance")
+            json.put("c_b", "$calories")
+            json.put("a_t", "$a_t")
+            json.put("p", pet_id)
 
-        Log.d("PostData", json.toString())
-        val body: RequestBody = json.toString().toRequestBody(JSON)
-        val request = Request.Builder()
-            .url("https://pvp.seriouss.am")
-            .post(body)
-            .build()
+            Log.d("PostData", json.toString())
+            val body: RequestBody = json.toString().toRequestBody(JSON)
+            val request = Request.Builder()
+                .url("https://pvp.seriouss.am")
+                .post(body)
+                .build()
 
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : okhttp3.Callback {
-            override fun onFailure(call: okhttp3.Call, e: IOException) {
-                e.printStackTrace()
-            }
+            val client = OkHttpClient()
+            client.newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    e.printStackTrace()
+                }
 
-            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                runOnUiThread {
-                    if (response.isSuccessful) {
-                        val responseString = response.body?.string()
-                        try {
-                            val postJson = JSONObject()
-                            postJson.put("type", "g_d")
-                            postJson.put("c", pathPoints.size)
-                            if (responseString != null) {
-                                postJson.put("f_a_r", responseString.toInt())
-                            }
-
-                            pathPoints.forEachIndexed { index, timedGeoPoint ->
-                                val pointData = JSONArray().apply {
-                                    put(timedGeoPoint.geoPoint.latitude)
-                                    put(timedGeoPoint.geoPoint.longitude)
-                                    put(formatDate(timedGeoPoint.timestamp))
-                                }
-                                postJson.put((index + 1).toString(), pointData)
-                            }
-                            Log.d("PostData", postJson.toString())
-
-                            val client = OkHttpClient()
-                            val mediaType = "application/json; charset=utf-8".toMediaType()
-                            val requestBody = postJson.toString().toRequestBody(mediaType)
-                            val request = Request.Builder()
-                                .url("https://pvp.seriouss.am")
-                                .post(requestBody)
-                                .build()
-
-                            client.newCall(request).enqueue(object : okhttp3.Callback {
-                                override fun onFailure(call: okhttp3.Call, e: IOException) {
-                                    e.printStackTrace()
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    runOnUiThread {
+                        if (response.isSuccessful) {
+                            val responseString = response.body?.string()
+                            try {
+                                val postJson = JSONObject()
+                                postJson.put("type", "g_d")
+                                postJson.put("c", pathPoints.size)
+                                if (responseString != null) {
+                                    postJson.put("f_a_r", responseString.toInt())
                                 }
 
-                                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                                    val responseBody = response.body?.string()
-                                    if (response.isSuccessful)
-                                    {
-                                        Log.d("PostData",  "Successfully sent" + postJson.toString())
+                                pathPoints.forEachIndexed { index, timedGeoPoint ->
+                                    val pointData = JSONArray().apply {
+                                        put(timedGeoPoint.geoPoint.latitude)
+                                        put(timedGeoPoint.geoPoint.longitude)
+                                        put(formatDate(timedGeoPoint.timestamp))
                                     }
-                                    else
-                                    {
-                                        Log.d("PostData",  responseBody.toString())
-                                    }
+                                    postJson.put((index + 1).toString(), pointData)
                                 }
-                            })
+                                Log.d("PostData", postJson.toString())
 
-                        } catch (e: JSONException) {
-                            e.printStackTrace()
+                                val client = OkHttpClient()
+                                val mediaType = "application/json; charset=utf-8".toMediaType()
+                                val requestBody = postJson.toString().toRequestBody(mediaType)
+                                val request = Request.Builder()
+                                    .url("https://pvp.seriouss.am")
+                                    .post(requestBody)
+                                    .build()
+
+                                client.newCall(request).enqueue(object : okhttp3.Callback {
+                                    override fun onFailure(call: okhttp3.Call, e: IOException) {
+                                        e.printStackTrace()
+                                    }
+
+                                    override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                                        val responseBody = response.body?.string()
+                                        if (response.isSuccessful) {
+                                            Log.d("PostData", "Successfully sent" + postJson.toString())
+                                        } else {
+                                            Log.d("PostData", responseBody.toString())
+                                        }
+                                    }
+                                })
+
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
+                            }
                         }
                     }
                 }
-            }
-        })
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
